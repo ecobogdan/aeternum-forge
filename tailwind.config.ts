@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -47,15 +48,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        gaming: {
+          bg: "hsl(var(--gaming-bg))",
+          surface: "hsl(var(--gaming-surface))",
+          border: "hsl(var(--gaming-border))",
+        },
+        nw: {
+          gold: "hsl(var(--nw-gold))",
+          "gold-dark": "hsl(var(--nw-gold-dark))",
+          silver: "hsl(var(--nw-silver))",
+          bronze: "hsl(var(--nw-bronze))",
         },
       },
       borderRadius: {

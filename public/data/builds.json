@@ -1,0 +1,54 @@
+[
+  {
+    "id": "great-axe-hatchet-pvp",
+    "title": "Great Axe + Hatchet PvP Build",
+    "link": "https://nwdb.info/build?b=pvp-great-axe-hatchet-s9",
+    "embed": "iframe",
+    "iframeHeight": 600,
+    "tags": ["PvP", "Great Axe", "Hatchet", "Melee", "DPS"],
+    "notes": "High damage melee build perfect for PvP encounters. Focus on aggressive playstyle with excellent chase potential.",
+    "youtube": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "updatedAt": "2024-01-15",
+    "featured": true
+  },
+  {
+    "id": "life-staff-void-gauntlet-heal",
+    "title": "Life Staff + Void Gauntlet Healer",
+    "link": "https://nwdb.info/build?b=life-staff-void-healer-s9", 
+    "embed": "link",
+    "tags": ["PvE", "Healing", "Life Staff", "Void Gauntlet", "Support"],
+    "notes": "Optimal healing build for dungeons and trials. Provides excellent group support and survivability.",
+    "updatedAt": "2024-01-12"
+  },
+  {
+    "id": "bow-spear-dex-build",
+    "title": "Bow + Spear Dexterity Build",
+    "link": "https://nwdb.info/build?b=bow-spear-dex-s9",
+    "embed": "iframe",
+    "iframeHeight": 550,
+    "tags": ["PvP", "PvE", "Bow", "Spear", "Ranged", "DPS"],
+    "notes": "Versatile ranged build with good melee backup. Excellent for both PvP and PvE content.",
+    "youtube": "https://www.youtube.com/embed/abc123def456",
+    "updatedAt": "2024-01-10"
+  },
+  {
+    "id": "fire-staff-ice-gauntlet",
+    "title": "Fire Staff + Ice Gauntlet Mage",
+    "link": "https://nwdb.info/build?b=fire-ice-mage-s9",
+    "embed": "link", 
+    "tags": ["PvE", "Magic", "Fire Staff", "Ice Gauntlet", "DPS", "AOE"],
+    "notes": "High burst damage mage build. Perfect for expeditions and large-scale PvE encounters.",
+    "updatedAt": "2024-01-08"
+  },
+  {
+    "id": "sword-shield-tank",
+    "title": "Sword + Shield Tank Build",
+    "link": "https://nwdb.info/build?b=sword-shield-tank-s9",
+    "embed": "iframe",
+    "iframeHeight": 600,
+    "tags": ["PvE", "Tank", "Sword", "Shield", "Defense"],
+    "notes": "Ultimate tank build for dungeons and trials. Maximum survivability and threat generation.",
+    "updatedAt": "2024-01-05",
+    "featured": true
+  }
+]
