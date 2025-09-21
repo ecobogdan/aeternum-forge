@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      builds: {
+        Row: {
+          abilities: Json
+          attributes: Json
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          items: Json
+          name: string
+          subcategory: string | null
+          updated_at: string
+        }
+        Insert: {
+          abilities?: Json
+          attributes?: Json
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          items?: Json
+          name: string
+          subcategory?: string | null
+          updated_at?: string
+        }
+        Update: {
+          abilities?: Json
+          attributes?: Json
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          items?: Json
+          name?: string
+          subcategory?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      nwdb_items: {
+        Row: {
+          cached_at: string
+          gear_score_max: number | null
+          has_random_perks: boolean | null
+          icon: string | null
+          id: string
+          item_type: string
+          name: string
+          perks: Json | null
+          rarity: string | null
+          tier: number | null
+        }
+        Insert: {
+          cached_at?: string
+          gear_score_max?: number | null
+          has_random_perks?: boolean | null
+          icon?: string | null
+          id: string
+          item_type: string
+          name: string
+          perks?: Json | null
+          rarity?: string | null
+          tier?: number | null
+        }
+        Update: {
+          cached_at?: string
+          gear_score_max?: number | null
+          has_random_perks?: boolean | null
+          icon?: string | null
+          id?: string
+          item_type?: string
+          name?: string
+          perks?: Json | null
+          rarity?: string | null
+          tier?: number | null
+        }
+        Relationships: []
+      }
+      nwdb_perks: {
+        Row: {
+          cached_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          cached_at?: string
+          description?: string | null
+          id: string
+          name: string
+        }
+        Update: {
+          cached_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
