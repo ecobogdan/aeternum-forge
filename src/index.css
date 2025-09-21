@@ -2,71 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* New World: Aeternum Gaming Design System
-All colors MUST be HSL for proper theme switching.
-*/
+/* New World: Aeternum Design System - Mystical dark theme with gold accents */
 
 @layer base {
   :root {
-    /* Base colors - Dark gaming theme */
-    --background: 210 24% 8%;
-    --foreground: 40 20% 92%;
+    /* Dark mystical background with subtle blue undertones */
+    --background: 215 25% 8%;
+    --foreground: 45 100% 95%;
 
-    /* Card and surface colors */
-    --card: 210 20% 12%;
-    --card-foreground: 40 20% 90%;
+    /* Card surfaces with subtle elevation */
+    --card: 215 20% 12%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 210 20% 10%;
-    --popover-foreground: 40 20% 92%;
+    /* Popover and dropdown surfaces */
+    --popover: 215 20% 12%;
+    --popover-foreground: 45 100% 95%;
 
-    /* Primary - New World gold/amber theme */
-    --primary: 43 96% 56%;
-    --primary-foreground: 210 24% 8%;
-    --primary-glow: 43 100% 70%;
+    /* Golden primary color inspired by Aeternum */
+    --primary: 45 90% 55%;
+    --primary-foreground: 215 25% 8%;
 
-    /* Secondary - Muted gold */
-    --secondary: 210 20% 16%;
-    --secondary-foreground: 43 80% 75%;
+    /* Muted blue-gray secondary */
+    --secondary: 215 15% 18%;
+    --secondary-foreground: 45 100% 95%;
 
-    /* Muted colors */
-    --muted: 210 15% 15%;
-    --muted-foreground: 215 15% 65%;
+    /* Subtle muted areas */
+    --muted: 215 15% 15%;
+    --muted-foreground: 45 20% 70%;
 
-    /* Accent - Bright amber */
-    --accent: 45 100% 65%;
-    --accent-foreground: 210 24% 8%;
+    /* Accent with mystical blue-purple */
+    --accent: 240 50% 25%;
+    --accent-foreground: 45 100% 95%;
 
-    /* Destructive */
-    --destructive: 0 75% 55%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive red for warnings */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 45 100% 95%;
 
-    /* Borders and inputs */
-    --border: 210 20% 20%;
-    --input: 210 20% 14%;
-    --ring: 43 96% 56%;
+    /* Borders and inputs with subtle glow effect */
+    --border: 215 15% 20%;
+    --input: 215 15% 18%;
+    --ring: 45 90% 55%;
 
-    /* Gaming specific colors */
-    --gaming-bg: 210 30% 6%;
-    --gaming-surface: 210 25% 10%;
-    --gaming-border: 210 20% 18%;
-    --nw-gold: 43 96% 56%;
-    --nw-gold-dark: 40 85% 45%;
-    --nw-silver: 210 15% 70%;
-    --nw-bronze: 25 60% 55%;
-
+    /* Custom design tokens for New World theme */
+    --gold-primary: 45 90% 55%;
+    --gold-secondary: 45 70% 45%;
+    --aeternum-blue: 200 80% 45%;
+    --corruption-purple: 280 60% 40%;
+    --nature-green: 120 50% 40%;
+    
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(43 96% 56%), hsl(40 85% 45%));
-    --gradient-dark: linear-gradient(180deg, hsl(210 30% 8%), hsl(210 25% 6%));
-    --gradient-card: linear-gradient(145deg, hsl(210 20% 12%), hsl(210 18% 10%));
+    --gradient-hero: linear-gradient(135deg, hsl(215 25% 8%), hsl(215 20% 12%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 90% 55%), hsl(45 70% 45%));
+    --gradient-mystical: linear-gradient(135deg, hsl(240 50% 25%), hsl(280 60% 40%));
     
-    /* Shadows */
-    --shadow-gold: 0 10px 30px -10px hsl(43 96% 56% / 0.3);
-    --shadow-dark: 0 10px 40px -15px hsl(210 50% 4% / 0.8);
+    /* Shadows with golden glow */
+    --shadow-glow: 0 0 20px hsl(45 90% 55% / 0.3);
+    --shadow-subtle: 0 4px 20px hsl(215 25% 4% / 0.4);
     
-    /* Animation */
+    /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-glow: box-shadow 0.3s ease-in-out;
-
+    
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
@@ -86,35 +81,33 @@ All colors MUST be HSL for proper theme switching.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Light theme variation (subtle adjustments) */
   .light {
-    /* Light mode - Gaming friendly light theme */
-    --background: 40 20% 95%;
-    --foreground: 210 24% 15%;
-    
-    --card: 0 0% 98%;
-    --card-foreground: 210 24% 15%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 24% 15%;
-    
-    --primary: 43 85% 45%;
-    --primary-foreground: 40 20% 95%;
-    
-    --secondary: 43 30% 90%;
-    --secondary-foreground: 210 24% 15%;
-    
-    --muted: 210 15% 92%;
-    --muted-foreground: 215 15% 35%;
-    
-    --accent: 43 85% 50%;
-    --accent-foreground: 40 20% 95%;
-    
-    --border: 214.3 31.8% 85%;
-    --input: 214.3 31.8% 88%;
-    
-    --gaming-bg: 40 25% 94%;
-    --gaming-surface: 0 0% 97%;
-    --gaming-border: 210 15% 80%;
+    --background: 45 100% 97%;
+    --foreground: 215 25% 15%;
+    --card: 45 50% 95%;
+    --card-foreground: 215 25% 15%;
+    --popover: 45 50% 95%;
+    --popover-foreground: 215 25% 15%;
+    --primary: 45 90% 45%;
+    --primary-foreground: 45 100% 97%;
+    --secondary: 215 10% 85%;
+    --secondary-foreground: 215 25% 15%;
+    --muted: 215 10% 90%;
+    --muted-foreground: 215 15% 45%;
+    --accent: 240 50% 65%;
+    --accent-foreground: 45 100% 97%;
+    --border: 215 15% 80%;
+    --input: 215 15% 85%;
+    --ring: 45 90% 45%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -124,36 +117,8 @@ All colors MUST be HSL for proper theme switching.
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-  }
-
-  /* Gaming specific utilities */
-  .gradient-primary {
-    background: var(--gradient-primary);
-  }
-  
-  .gradient-dark {
-    background: var(--gradient-dark);
-  }
-  
-  .gradient-card {
-    background: var(--gradient-card);
-  }
-  
-  .shadow-gold {
-    box-shadow: var(--shadow-gold);
-  }
-  
-  .shadow-dark {
-    box-shadow: var(--shadow-dark);
-  }
-  
-  .transition-smooth {
-    transition: var(--transition-smooth);
-  }
-  
-  .transition-glow {
-    transition: var(--transition-glow);
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
   /* Custom scrollbar */
@@ -171,6 +136,39 @@ All colors MUST be HSL for proper theme switching.
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary-glow));
+    background: hsl(var(--gold-secondary));
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .hero-text {
+    @apply text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-gold-secondary bg-clip-text text-transparent;
+  }
+
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .mystical-border {
+    border-image: var(--gradient-mystical) 1;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)), 0 0 15px hsl(var(--primary)); }
+    to { box-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary)); }
   }
 }

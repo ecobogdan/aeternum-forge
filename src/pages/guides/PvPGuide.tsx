@@ -1,277 +1,575 @@
-import Layout from "@/components/Layout/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
-import { Swords, Shield, Zap, Users, Target, AlertTriangle } from "lucide-react";
+import Layout from '@/components/Layout';
+import { siteUrl } from '@/config/seo';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { 
+  Swords, 
+  Shield, 
+  Target, 
+  Users, 
+  Map,
+  Clock,
+  ExternalLink,
+  Zap,
+  Settings,
+  Hourglass,
+  TrendingUp,
+  ArrowDownUp,
+  Milk,
+  Sword,
+
+} from 'lucide-react';
 
 const PvPGuide = () => {
-  const buildArchetypes = [
-    {
-      name: "Bruiser",
-      weapons: "Great Axe + War Hammer",
-      role: "Melee DPS",
-      strengths: "High damage, crowd control, gap closing",
-      weaknesses: "Vulnerable to kiting, limited range"
-    },
-    {
-      name: "Assassin", 
-      weapons: "Bow + Spear",
-      role: "Ranged DPS",
-      strengths: "High burst, mobility, range advantage",
-      weaknesses: "Low survivability, skill dependent"
-    },
-    {
-      name: "Mage",
-      weapons: "Fire Staff + Ice Gauntlet", 
-      role: "Magical DPS",
-      strengths: "AOE damage, crowd control, burst potential",
-      weaknesses: "Mana management, positioning crucial"
-    },
-    {
-      name: "Healer",
-      weapons: "Life Staff + Void Gauntlet",
-      role: "Support",
-      strengths: "Group sustainability, damage mitigation", 
-      weaknesses: "Low solo damage, priority target"
-    },
-    {
-      name: "Tank",
-      weapons: "Sword + Shield",
-      role: "Frontline",
-      strengths: "High survivability, crowd control",
-      weaknesses: "Low damage output, mobility limited"
-    }
+  const tableOfContents = [
+    { id: 'pvp-basics', title: 'PvP Fundamentals', icon: Swords },
+    { id: 'combat-mechanics', title: 'Advanced Combat', icon: Target },
+    { id: 'pvp-settings', title: 'Best PvP Settings', icon: Settings },
+    { id: 'stamina-management', title: 'Stamina Management', icon: Zap },
+    { id: 'weapon-matchups', title: 'Matchup Knowledge', icon: Map },
+    { id: 'cooldowns', title: 'Cooldowns & Engagement', icon: Hourglass },
+    { id: 'disengage', title: 'How to Disengage', icon: ArrowDownUp },
+    { id: 'consumable-mastery', title: 'Consumable Mastery', icon: TrendingUp },
+    { id: 'universal-pvp-habits', title: 'Universal PvP Habits', icon: Users },
+    { id: 'weapon-specific-tips', title: 'Weapon-Specific Tips', icon: Swords },
+    { id: 'target-priority', title: 'Target Priority', icon: Target },
+    { id: 'tiny-details', title: 'Tiny Details That Win Fights', icon: Map },
+    { id: 'how-to-improve', title: 'How to Improve', icon: ExternalLink },
+    { id: 'final-thoughts', title: 'Final Thoughts', icon: Shield },
   ];
 
-  const pvpModes = [
-    {
-      name: "Open World PvP",
-      description: "Flag up for spontaneous encounters while questing and gathering",
-      tips: [
-        "Stay aware of surroundings and escape routes",
-        "Travel in groups when possible",
-        "Keep consumables stocked for emergency healing",
-        "Know when to disengage from unfavorable fights"
-      ]
-    },
-    {
-      name: "Outpost Rush (OPR)",
-      description: "20v20 structured PvP with objectives and siege mechanics",
-      tips: [
-        "Focus objectives over kills - capture outposts and gather materials",
-        "Coordinate with team for baron and brute spawns",
-        "Use siege weapons effectively against fortified positions",
-        "Communicate enemy movements and coordinate pushes"
-      ]
-    },
-    {
-      name: "Wars",
-      description: "50v50 company territory battles with siege warfare",
-      tips: [
-        "Follow shot-caller instructions precisely",
-        "Understand your role: siege crew, backline, frontline",
-        "Focus fire priority targets called by leadership",
-        "Maintain formation and avoid overextending"
-      ]
-    }
-  ];
-
-  const combatFundamentals = [
-    {
-      title: "Animation Canceling",
-      description: "Cancel attack animations with dodge or block to increase DPS and mobility"
-    },
-    {
-      title: "Stamina Management", 
-      description: "Balance offense and defense - save stamina for crucial dodges or blocks"
-    },
-    {
-      title: "Weapon Swapping",
-      description: "Master quick weapon swaps to chain abilities and adapt to situations"
-    },
-    {
-      title: "Positioning",
-      description: "Control engagement distance and use terrain to your advantage"
-    },
-    {
-      title: "Cooldown Tracking",
-      description: "Track enemy cooldowns to engage when they're vulnerable"
-    }
-  ];
-
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+  const pageUrl = `${siteUrl}/guides/pvp-guide`;
   return (
-    <Layout>
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <Layout 
+      title="PvP Guide - New World Builds"
+      description="Master PvP combat in New World Aeternum with advanced strategies, weapon matchups, and tactical guides for solo and group PvP."
+      canonical="/guides/pvp-guide"
+      type="article"
+      keywords={["New World PvP", "Aeternum PvP", "New World PvP builds", "PvP strategies"]}
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: "Ultimate PvP Guide for New World Aeternum",
+        description: "Advanced PvP strategies, weapon matchups, and tactical guidance for dominating New World Aeternum.",
+        datePublished: "2025-02-10",
+        dateModified: "2025-09-19",
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": pageUrl
+        },
+        author: {
+          "@type": "Person",
+          name: "LLangi"
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "NW-Builds by LLangi",
+          url: siteUrl
+        },
+        image: [`${siteUrl}/og-default.jpg`]
+      }}
+    ><div className="container px-4 py-8 space-y-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Swords className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold text-foreground">PvP Combat Guide</h1>
+        <div className="text-center space-y-4">
+          <div className="flex justify-center items-center space-x-2 text-sm text-muted-foreground">
+            <Clock className="h-4 w-4" />
+            <span>Last updated: September 19, 2025</span>
+            <span>•</span>
+            <span>Reading time: ~7 min</span>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Master the art of player vs player combat in New World: Aeternum. 
-            Learn advanced strategies, build optimization, and tactical approaches for every PvP scenario.
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-gold-primary bg-clip-text text-transparent">
+            PvP Mastery Guide
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Dominate the battlefield with advanced PvP strategies, weapon matchup knowledge, and tactical gameplay. 
+            From 1v1 duels to large-scale wars, master every aspect of PvP combat.
           </p>
-          <div className="flex items-center justify-center gap-2 mt-4">
-            <Badge variant="destructive">Advanced Guide</Badge>
-            <Badge variant="outline">Season 9 Meta</Badge>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Badge variant="default">Advanced</Badge>
+            <Badge variant="secondary">Season 9 Meta</Badge>
+            <Badge variant="outline">Combat Focus</Badge>
           </div>
         </div>
 
-        {/* Combat Fundamentals */}
-        <Card className="gradient-card border-gaming-border mb-12">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" />
-              Combat Fundamentals
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {combatFundamentals.map((fundamental) => (
-                <div key={fundamental.title} className="p-4 rounded-lg bg-gaming-surface border border-gaming-border">
-                  <h3 className="font-semibold text-foreground mb-2">{fundamental.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{fundamental.description}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Build Archetypes */}
-        <Card className="gradient-card border-gaming-border mb-12">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-primary" />
-              PvP Build Archetypes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {buildArchetypes.map((build) => (
-                <div key={build.name} className="p-4 rounded-lg bg-gaming-surface border border-gaming-border">
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-lg text-foreground">{build.name}</h3>
-                        <Badge variant="secondary" className="text-xs">{build.role}</Badge>
-                      </div>
-                      <p className="text-sm text-primary mb-2">{build.weapons}</p>
-                    </div>
-                    <div className="flex-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-1">Strengths:</p>
-                        <p className="text-sm text-green-400">{build.strengths}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-1">Weaknesses:</p>
-                        <p className="text-sm text-red-400">{build.weaknesses}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* PvP Game Modes */}
-        <div className="space-y-8 mb-12">
-          {pvpModes.map((mode, index) => (
-            <Card key={mode.name} className="gradient-card border-gaming-border">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Table of Contents */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    {index === 0 && <Swords className="h-5 w-5 text-primary" />}
-                    {index === 1 && <Users className="h-5 w-5 text-primary" />}
-                    {index === 2 && <AlertTriangle className="h-5 w-5 text-primary" />}
-                  </div>
-                  {mode.name}
-                </CardTitle>
+                <CardTitle className="text-lg">Guide Contents</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-6 leading-relaxed">{mode.description}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {mode.tips.map((tip, tipIndex) => (
-                    <div key={tipIndex} className="flex items-start gap-3 p-3 rounded-lg bg-gaming-surface">
-                      <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold flex-shrink-0 mt-0.5">
-                        {tipIndex + 1}
-                      </div>
-                      <p className="text-sm text-muted-foreground">{tip}</p>
+              <CardContent className="space-y-2">
+                {tableOfContents.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-left h-auto py-2"
+                    onClick={() => scrollToSection(item.id)}
+                  >
+                    <item.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="text-sm">{item.title}</span>
+                  </Button>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3 space-y-12">
+            {/* PvP Basics */}
+            <section id="pvp-basics">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Swords className="mr-3 h-6 w-6" />
+                    PvP Fundamentals
+                  </CardTitle>
+                  <CardDescription>
+                    Master the core concepts that separate good from great PvP players.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                  <p>
+                    PvP in New World Aeternum rewards skill, positioning, and game knowledge over gear alone. 
+                    Understanding these fundamentals is crucial for success at any level of play.
+                  </p>
+                  
+                  <h4 className="text-lg font-semibold text-primary">Core PvP Principles:</h4>
+                  <ul className="list-disc pl-6 space-y-2">
+                    <li><strong>Positioning:</strong> Control space and force favorable engagements</li>
+                    <li><strong>Stamina Management:</strong> Never overextend - always keep escape options</li>
+                    <li><strong>Ability Timing:</strong> Save key abilities for critical moments</li>
+                    <li><strong>Target Prioritization:</strong> Focus fire on the most dangerous or vulnerable targets</li>
+                    <li><strong>Cooldown Tracking:</strong> Know when enemies have used their escape abilities</li>
+                  </ul>
+
+                  <h4 className="text-lg font-semibold text-primary">Mindset & Psychology:</h4>
+                  <p>
+                    Mental state is often overlooked but crucial. Stay calm under pressure, learn from losses, 
+                    and avoid tilting. Every death is a learning opportunity.
+                  </p>
+
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <h5 className="font-semibold mb-2 text-primary">Advanced Tip:</h5>
+                    <p className="text-sm">
+                      Watch your opponent's stamina bar. When it's low, they can't dodge or block effectively. 
+                      This is your window for aggressive plays and combo execution.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Combat Mechanics */}
+            <section id="combat-mechanics">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Target className="mr-3 h-6 w-6" />
+                    Advanced Combat Mechanics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                  <h4 className="text-lg font-semibold text-primary">Animation Canceling:</h4>
+                  <p>
+                    Master animation canceling to increase your DPS and mobility. Key techniques include:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Light attack: Dodge roll to cancel recovery frames</li>
+                    <li>Heavy attack: Block to cancel the swing if you miss</li>
+                    <li>Ability: Weapon swap to reduce cooldown perception</li>
+                  </ul>
+
+                  <h4 className="text-lg font-semibold text-primary">Grit & Crowd Control:</h4>
+                  <p>
+                    Understanding grit (immunity to stagger) and CC is essential for timing your abilities:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
+                    <div className="bg-muted/30 p-3 rounded">
+                      <h5 className="font-medium text-gold-primary mb-1">Grit Abilities</h5>
+                      <p className="text-xs text-muted-foreground">
+                        Cannot be staggered during these abilities. Use them to trade damage or escape bad situations.
+                      </p>
                     </div>
-                  ))}
+                    <div className="bg-muted/30 p-3 rounded">
+                      <h5 className="font-medium text-corruption-purple mb-1">Hard CC</h5>
+                      <p className="text-xs text-muted-foreground">
+                        Stuns, knockdowns, and roots that completely disable enemies. Save these for key moments.
+                      </p>
+                    </div>
+                  </div>
+
+                  <h4 className="text-lg font-semibold text-primary">Desync & Lag Compensation:</h4>
+                  <p>
+                    Online PvP involves network delays. Learn to predict and compensate for these factors 
+                    to land abilities more consistently and avoid "phantom hits."
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* PvP Settings */}
+            <section id="pvp-settings">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Settings className="mr-3 h-6 w-6" />
+                    Best PvP Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                  <p>
+                  Most players never touch these. Change them once and your fights immediately feel cleaner.
+                  </p>
+
+                  <div className="space-y-4 not-prose">
+                    <div className="bg-nature-green/20 p-4 rounded border border-nature-green/30">
+                      <h5 className="font-semibold text-nature-green mb-2">Fix these settings first for instant clarity and control</h5>
+                      <ul className="text-sm space-y-1 text-muted-foreground">
+                        <li>• <strong>FOV:</strong> 70 (max)</li>
+                        <li>• <strong>Tilt-Based Camera:</strong> 0</li>
+                        <li>• <strong>Camera Shake:</strong> Disabled</li>
+                        <li>• <strong>Freeform Movement:</strong> Enabled</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+
+            {/* Stamina Management */}
+            <section id="stamina-management">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Zap className="mr-3 h-6 w-6" />
+                    Stamina Management
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                  <p>
+                  Avoid grey barring. When you run out of stamina, you're exhausted and easy to CC-chain.<br>
+                  </br><br></br>
+                  • Don't spam dodge, one dodge usually breaks tracking. (max)<br></br>
+                  • Keep a buffer: never dodge below 50 stamina (55 in heavy).<br></br>
+                  • Absorb a hit if needed; exhaustion is worse than damage.
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+
+
+            {/* Weapon Matchups */}
+            <section id="weapon-matchups">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Shield className="mr-3 h-6 w-6" />
+                    Weapon Matchup Knowledge
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                  <p>
+                    Understanding weapon matchups is crucial for 1v1 success. Each weapon has strengths 
+                    and weaknesses against others.
+                  </p>
+
+                  <h4 className="text-lg font-semibold text-primary">Key Matchup Strategies:</h4>
+                  <ul className="list-disc pl-6 space-y-2">
+                    <li><strong>vs Ranged:</strong> Use line of sight and gap closers effectively</li>
+                    <li><strong>vs Melee:</strong> Control spacing and punish overextensions</li>
+                    <li><strong>vs Healers:</strong> Apply consistent pressure and use anti-heal</li>
+                    <li><strong>vs Tanks:</strong> Avoid extended trades, look for burst windows</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+
+              {/* Cooldowns */}
+              <section id="cooldowns">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Hourglass className="mr-3 h-6 w-6" />
+                    Cooldown & Engagement Timing
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                <p>
+                • Learn enemy builds to predict weakness windows <br></br>
+                • Engage after they burn major cooldowns (e.g., Spear Sweep)<br></br>
+                • Don't fight without your own defensive skills/potions<br></br>
+                • Pre-pot buffs like Serum for early momentum
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+
+
+              {/* Disengage */}
+              <section id="disengage">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <ArrowDownUp className="mr-3 h-6 w-6" />
+                    How to Disengage
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-4">
+                <p>
+                • Always know your escape route <br></br>
+                • Don't panic dodge, wait for recovery windows (e.g., GA Reap follow-up)<br></br>
+                • Retreat while facing the fight; use ranged pressure<br></br>
+                • Use CC defensively: Shockwave, Sweep, Trip
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+
+
+
+{/* Consumable Mastery */}
+<section id="consumable-mastery">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <TrendingUp className="mr-3 h-6 w-6" />
+                    Consumable Mastery
+                  </CardTitle>
+                  <CardDescription>Potions and runes separate average players from great ones.</CardDescription>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-6">
+                  <div>
+                    <h4 className="text-lg font-semibold">Endless Thirst vs Ankh</h4>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr>
+                            <th className="text-left p-2 border-b border-border">Rune</th>
+                            <th className="text-left p-2 border-b border-border">Effect</th>
+                            <th className="text-left p-2 border-b border-border">Strengths</th>
+                            <th className="text-left p-2 border-b border-border">Weaknesses</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="p-2 border-b border-border"><strong>Endless Thirst</strong></td>
+                            <td className="p-2 border-b border-border">Rotate potion types to bypass increased cooldowns</td>
+                            <td className="p-2 border-b border-border">~133% potion power, long sustain</td>
+                            <td className="p-2 border-b border-border">Requires active rotation</td>
+                          </tr>
+                          <tr>
+                            <td className="p-2 border-b border-border"><strong>Ankh</strong></td>
+                            <td className="p-2 border-b border-border">Boosts healing received</td>
+                            <td className="p-2 border-b border-border">Simple sustain option</td>
+                            <td className="p-2 border-b border-border">Potions only ~75% effective</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-semibold">Potion Combos</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li><strong>Serum + Regeneration:</strong> Pre-pot serum, then regen for 35/40s of sustain (~800/1,000 HP/sec depending on build).</li>
+                      <li><strong>Blooddrinker Rune:</strong> Best on high base damage weapons (Greatsword, War Hammer).</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+
+            {/* Universal PvP Habits */}
+            <section id="universal-pvp-habits">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Users className="mr-3 h-6 w-6" />
+                    Universal PvP Habits
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li><strong>Time CC:</strong> Land it when you can follow up or at the end of enemy casts.</li>
+                    <li><strong>Punish grit windows:</strong> Many abilities lose grit just before impact, CC then.</li>
+                    <li><strong>Block smartly:</strong> Don't block GS/WH heavy swings; do block Rapier/Hatchet/VB light strings.</li>
+                    <li><strong>Dodge unpredictably:</strong> Don't fall into a rhythm.</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Weapon-Specific Tips */}
+            <section id="weapon-specific-tips">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Swords className="mr-3 h-6 w-6" />
+                    Weapon-Specific Tips
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-6">
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Ice Gauntlet</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Cast inside frosted areas for ~15% cooldown reduction (passive).</li>
+                      <li>Dodge slightly late to avoid the IG heavy-root follow-up after <em>Ice Storm</em>.</li>
+                      <li>Break <em>Entomb</em> with block (RMB), not dodge, to trigger damage/knockback.</li>
+                    </ul>
+                  </div>
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Void Gauntlet</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Look slightly down when casting <em>Scream</em> for extra range.</li>
+                      <li>Consider aimlock for faster tether connects.</li>
+                    </ul>
+                  </div>
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Hatchet + Great Axe</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Pre-activate <strong>Berserk</strong> or <strong>Stoneform Heartrune</strong> to resist CC pulls (e.g., <em>Gravity Well</em>).</li>
+                    </ul>
+                  </div>
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Rapier</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Turn your back before <em>Riposte</em> to surprise attackers.</li>
+                      <li>Bait healer Ripostes by feinting, then punish the cooldown.</li>
+                      <li>Evade backward, it covers more distance than forward.</li>
+                    </ul>
+                  </div>
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Greatsword</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>With <em>Cross-cut</em>, cancel the second swing, delay the third to burn stamina with awkward dodges.</li>
+                    </ul>
+                  </div>
+                  <div>
+                  <h4 className="text-lg font-semibold text-primary">Fire Staff</h4>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li><em>Smolder</em> on Fireball is often overrated, value requires direct hits, not splash.</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Target Priority */}
+            <section id="target-priority">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Target className="mr-3 h-6 w-6" />
+                    Target Priority
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Focus healers/DPS out of position.</li>
+                    <li>Wait for healers to burn <em>Sacred Ground</em> before diving.</li>
+                    <li>Secure low HP kills for numbers advantage.</li>
+                    <li>Ignore tanks unless isolated.</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Tiny Details */}
+            <section id="tiny-details">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Map className="mr-3 h-6 w-6" />
+                    Tiny Details That Win Fights
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li><strong>Pre-pot:</strong> Use potions before big hits, not after.</li>
+                    <li><strong>Camera control:</strong> Constantly scan for flanks.</li>
+                    <li><strong>Zoning:</strong> Forcing healers out of position often beats trying to kill them.</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* How to Improve */}
+            <section id="how-to-improve">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <ExternalLink className="mr-3 h-6 w-6" />
+                    How to Improve
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Daily duels with strong players, learn, don't just win.</li>
+                    <li>Record & review fights to spot mistakes.</li>
+                    <li>Play multiple roles to understand enemy habits.</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Final Thoughts */}
+            <section id="final-thoughts">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center text-2xl">
+                    <Shield className="mr-3 h-6 w-6" />
+                    Final Thoughts
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-invert max-w-none space-y-2">
+                  <p>
+                    PvP in <em>New World: Aeternum</em> is more than gear, it's awareness, stamina discipline, and precise timing.
+                    Apply these settings, consumable strategies, and weapon tricks to see results fast.
+                  </p>
+                </CardContent>
+              </Card>
+            </section>
+
+
+            {/* Related Links */}
+            <Card className="bg-gradient-mystical">
+              <CardContent className="p-8 text-center space-y-4">
+                <h3 className="text-2xl font-bold text-foreground">Level Up Your PvP Game</h3>
+                <p className="text-foreground/80">
+                  Ready to put theory into practice? Check out our meta builds and optimization tools.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button asChild variant="secondary">
+                    <Link to="/builds">
+                      <Swords className="mr-2 h-4 w-4" />
+                      PvP Builds
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="border-foreground/20 text-foreground hover:bg-foreground/10">
+                    <Link to="/tools/armor-weight-calculator">
+                      <Shield className="mr-2 h-4 w-4" />
+                      Optimize Loadout
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="border-foreground/20 text-foreground hover:bg-foreground/10">
+                    <Link to="/guides/opr-healing-guide">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      OPR Guide
+                    </Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
-
-        {/* Advanced Tips */}
-        <Card className="gradient-card border-gaming-border mb-12">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              Advanced PvP Tips
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="font-semibold text-foreground">Psychological Warfare</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Bait enemy cooldowns before committing to fights</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Use terrain and line of sight to control engagements</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Force enemies into unfavorable positions</p>
-                  </li>
-                </ul>
-              </div>
-              <div className="space-y-4">
-                <h3 className="font-semibold text-foreground">Tactical Awareness</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Monitor enemy health and mana bars constantly</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Know when to disengage and reset positioning</p>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></div>
-                    <p className="text-sm text-muted-foreground">Coordinate with teammates for focus fire</p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Call to Action */}
-        <div className="text-center py-12 border-t border-gaming-border">
-          <h2 className="text-2xl font-bold mb-4 text-foreground">Ready to Dominate PvP?</h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Put these strategies into practice with optimized builds and continue improving 
-            with our specialized guides and calculators.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="hero">
-              <Link to="/builds">View PvP Builds</Link>
-            </Button>
-            <Button asChild variant="gaming">
-              <Link to="/guides/opr-healing">OPR Healing Guide</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link to="/calculator">Optimize Armor Weight</Link>
-            </Button>
           </div>
         </div>
       </div>
@@ -280,3 +578,9 @@ const PvPGuide = () => {
 };
 
 export default PvPGuide;
+
+
+
+
+
+

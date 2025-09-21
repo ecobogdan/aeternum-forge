@@ -22,7 +22,6 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -48,16 +47,21 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gaming: {
-          bg: "hsl(var(--gaming-bg))",
-          surface: "hsl(var(--gaming-surface))",
-          border: "hsl(var(--gaming-border))",
-        },
-        nw: {
-          gold: "hsl(var(--nw-gold))",
-          "gold-dark": "hsl(var(--nw-gold-dark))",
-          silver: "hsl(var(--nw-silver))",
-          bronze: "hsl(var(--nw-bronze))",
+        // New World: Aeternum custom colors
+        "gold-primary": "hsl(var(--gold-primary))",
+        "gold-secondary": "hsl(var(--gold-secondary))",
+        "aeternum-blue": "hsl(var(--aeternum-blue))",
+        "corruption-purple": "hsl(var(--corruption-purple))",
+        "nature-green": "hsl(var(--nature-green))",
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
         },
       },
       borderRadius: {
@@ -83,9 +87,20 @@ export default {
           },
         },
       },
+      backgroundImage: {
+        'gradient-hero': 'var(--gradient-hero)',
+        'gradient-gold': 'var(--gradient-gold)',
+        'gradient-mystical': 'var(--gradient-mystical)',
+      },
+      boxShadow: {
+        'glow': 'var(--shadow-glow)',
+        'subtle': 'var(--shadow-subtle)',
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite alternate",
       },
     },
   },

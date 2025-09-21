@@ -1,149 +1,269 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Layout from "@/components/Layout/Layout";
-import heroBg from "@/assets/hero-bg.jpg";
-import { Swords, Calculator, BookOpen, Coins, Shield, Target } from "lucide-react";
+import Layout from '@/components/Layout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { siteUrl } from "@/config/seo";
+import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
+import { Swords, Calculator, BookOpen, TrendingUp, Users, Zap } from 'lucide-react';
+import heroBackground from '@/assets/hero-background.jpg';
 
 const Index = () => {
   const features = [
     {
       icon: Swords,
-      title: "Season 9 Builds",
-      description: "Optimized character builds for the latest season with detailed breakdowns and embed views.",
-      href: "/builds",
-      color: "text-red-400"
+      title: "S9 Meta Builds",
+      description: "Optimized builds for Season 9 with detailed explanations and gear recommendations.",
+      link: "/new-world-builds",
+      color: "aeternum-blue"
     },
     {
       icon: BookOpen,
-      title: "Comprehensive Guides", 
-      description: "Expert guides covering PvP tactics, healing strategies, and dungeon mechanics.",
-      href: "/guides/new-player",
-      color: "text-blue-400"
+      title: "Expert Guides",
+      description: "Comprehensive guides covering everything from new player basics to advanced PvE/PvP strategies.",
+      link: "/guides/new-world-new-player-guide",
+      color: "nature-green"
     },
     {
       icon: Calculator,
-      title: "Armor Calculator",
-      description: "Calculate your exact load thresholds and optimize your equipment weight distribution.",
-      href: "/calculator",
-      color: "text-green-400"
+      title: "Optimization Tools",
+      description: "Calculate armor weights, profit margins, and optimize your gameplay with precision tools.",
+      link: "/tools/new-world-armor-weight-calculator",
+      color: "gold-primary"
     },
     {
-      icon: Coins,
-      title: "Gold Making Tools",
-      description: "Profit calculators for Runglass, Trophies, and trading to maximize your gold income.",
-      href: "/tools/runglass",
-      color: "text-yellow-400"
-    },
-    {
-      icon: Shield,
-      title: "PvP Strategies",
-      description: "Advanced PvP tactics and build optimizations for Outpost Rush and Wars.",
-      href: "/guides/pvp",
-      color: "text-purple-400"
-    },
-    {
-      icon: Target,
-      title: "Endgame Content",
-      description: "Master the Hive of Gorgon and other challenging endgame encounters.",
-      href: "/guides/hive-gorgon",
-      color: "text-orange-400"
+      icon: TrendingUp,
+      title: "Gold Making",
+      description: "Master the market with detailed crafting calculators and profit optimization tools.",
+      link: "/tools/new-world-runeglass",
+      color: "corruption-purple"
     }
   ];
 
+  const stats = [
+    { label: "Active Builds", value: "100+" },
+    { label: "Detailed Guides", value: "10+" },
+    { label: "Optimization Tools", value: "4" },
+    { label: "Community Members", value: "4k+" }
+  ];
+
+  const featuredBuildVideoUrl = "https://www.youtube.com/embed/v_20005p8aY?si=4md5D9qviF4Bfbpz";
+
   return (
-    <Layout>
+    <Layout
+      title="New World Builds, Guides & Tools | NW-Builds by LLangi"
+      description="Master New World Aeternum with curated Season 9 builds, actionable guides, and optimization tools from LLangi."
+      canonical="/"
+      keywords={["New World builds", "New World guides", "Aeternum tools", "LLangi builds", "New World calculators"]}
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "New World Builds, Guides & Tools",
+        description: "Master New World Aeternum with curated Season 9 builds, actionable guides, and optimization tools from LLangi.",
+        url: siteUrl,
+        primaryImageOfPage: `${siteUrl}/og-default.jpg`,
+        inLanguage: "en",
+        publisher: {
+          "@type": "Organization",
+          name: "NW-Builds by LLangi",
+          url: siteUrl
+        }
+      }}
+    >
       {/* Hero Section */}
-      <section 
-        className="relative min-h-[80vh] flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white">
-            Master
-            <span className="gradient-primary bg-clip-text text-transparent"> Aeternum</span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
-            Your ultimate companion for New World: Aeternum. Expert builds, comprehensive guides, 
-            and powerful calculators to dominate every aspect of the game.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="hero" size="xl">
-              <Link to="/builds">View S9 Builds</Link>
-            </Button>
-            <Button asChild variant="gaming" size="xl">
-              <Link to="/guides/new-player">Start Learning</Link>
-            </Button>
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroBackground})` }}
+        >
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 container px-4 text-center">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-4xl md:text-7xl font-bold bg-gradient-to-r from-primary via-gold-primary to-aeternum-blue bg-clip-text text-transparent animate-float">
+                Master New World Aeternum
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+                The ultimate hub for builds, guides, and optimization tools. 
+                Dominate Aeternum with expert strategies and cutting-edge calculators.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button asChild size="lg" className="text-lg px-8 py-3 glow-effect">
+                <Link to="/new-world-builds">
+                  <Swords className="mr-2 h-5 w-5" />
+                  Explore Builds
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="text-lg px-8 py-3">
+                <Link to="/guides/new-world-new-player-guide">
+                  <BookOpen className="mr-2 h-5 w-5" />
+                  Start Learning
+                </Link>
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-7xl">
+      {/* Features Section */}
+      <section className="py-24 bg-card/50">
+        <div className="container px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">
               Everything You Need to Excel
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              From beginner guides to advanced strategies, we've got every tool and resource 
-              to help you become a legendary adventurer in Aeternum.
+              From meta builds to profit calculators, we provide the tools and knowledge 
+              to help you dominate in New World Aeternum.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature) => (
-              <Card key={feature.title} className="gradient-card border-gaming-border hover:shadow-gold transition-all duration-300 group">
-                <CardHeader className="text-center">
-                  <div className={`mx-auto w-12 h-12 rounded-lg bg-gaming-surface flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className={`h-6 w-6 ${feature.color}`} />
-                  </div>
-                  <CardTitle className="text-xl font-semibold text-foreground">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-6 text-center leading-relaxed">
-                    {feature.description}
-                  </p>
-                  <Button asChild variant="gold" className="w-full">
-                    <Link to={feature.href}>Explore</Link>
-                  </Button>
-                </CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index} className="group hover:shadow-glow transition-all duration-300 cursor-pointer">
+                <Link to={feature.link}>
+                  <CardHeader className="text-center">
+                    <div className="mx-auto p-4 rounded-full bg-gradient-gold mb-4 group-hover:animate-glow">
+                      <feature.icon className="h-8 w-8 text-primary-foreground" />
+                    </div>
+                    <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-center text-base">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Link>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Latest Updates */}
-      <section className="py-20 px-4 bg-gaming-bg">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl font-bold mb-8 text-foreground">Stay Updated</h2>
-          <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
-            New World: Aeternum is constantly evolving. Follow our content for the latest 
-            build optimizations, patch analysis, and meta shifts.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <div className="text-muted-foreground">Optimized Builds</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">25+</div>
-              <div className="text-muted-foreground">Detailed Guides</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">10K+</div>
-              <div className="text-muted-foreground">Community Members</div>
-            </div>
+      {/* Latest Content Section */}
+      <section className="py-24">
+        <div className="container px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">
+              Latest Content
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Stay up-to-date with the newest updates.
+            </p>
           </div>
 
-          <Button asChild variant="hero" size="xl">
-            <Link to="/builds">Start Your Journey</Link>
-          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Featured Build */}
+            <Card className="md:col-span-2 hover:shadow-glow transition-all duration-300">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Badge variant="default" className="bg-gold-primary text-primary-foreground">
+                  @LLangiTTV
+                  </Badge>
+                </div>
+                <CardTitle className="text-2xl">Latest YouTube Video</CardTitle>
+                <CardDescription>
+                  Subscribe to the channel to make sure you don't miss the latest updates.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div
+                    className="relative w-full overflow-hidden rounded-lg bg-black"
+                    style={{ paddingTop: "56.25%" }}
+                  >
+                    <iframe
+                      className="absolute inset-0 h-full w-full"
+                      src={featuredBuildVideoUrl}
+                      title="Last Youtube Video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Tools */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Calculator className="mr-2 h-5 w-5" />
+                  Quick Tools
+                </CardTitle>
+                <CardDescription>
+                  Access our most popular calculators
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/tools/new-world-armor-weight-calculator">
+                    <Zap className="mr-2 h-4 w-4" />
+                    Armor Weight Calculator
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/tools/new-world-runeglass">
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Runeglass Profit Calculator
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/tools/new-world-trophies">
+                    <Users className="mr-2 h-4 w-4" />
+                    Trophy Calculator
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-gradient-mystical">
+        <div className="container px-4 text-center">
+          <div className="max-w-3xl mx-auto space-y-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              Ready to Dominate Aeternum?
+            </h2>
+            <p className="text-xl text-foreground/80">
+              Join hundreds of players who've improved their gameplay with our expert guides and tools.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-3">
+                <Link to="/new-world-builds">
+                  Start with Builds
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="text-lg px-8 py-3 border-foreground/20 text-foreground hover:bg-foreground/10">
+                <Link to="/guides/new-world-new-player-guide">
+                  Read the Guides
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
     </Layout>

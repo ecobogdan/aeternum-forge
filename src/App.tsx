@@ -4,17 +4,19 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import BuildsPage from "./pages/BuildsPage";
-import ArmorCalculator from "./pages/ArmorCalculator";
+import Builds from "./pages/Builds";
+import ArmorWeightCalculator from "./pages/ArmorWeightCalculator";
+import RunglassCalculator from "./pages/RunglassCalculator";
+import TrophyCalculator from "./pages/TrophyCalculator";
+import MatrixCalculator from "./pages/MatrixCalculator";
 import NewPlayerGuide from "./pages/guides/NewPlayerGuide";
+import EndGameGuide from "./pages/guides/EndGameGuide";
 import PvPGuide from "./pages/guides/PvPGuide";
 import OPRHealingGuide from "./pages/guides/OPRHealingGuide";
-import HiveGorgonGuide from "./pages/guides/HiveGorgonGuide";
-import GoldMakingGuide from "./pages/guides/GoldMakingGuide";
-import RunglassCalculator from "./pages/tools/RunglassCalculator";
-import TrophyCalculator from "./pages/tools/TrophyCalculator";
-import MatrixCalculator from "./pages/tools/MatrixCalculator";
+import HiveOfGorgonGuide from "./pages/guides/HiveOfGorgonGuide";
+import UltimateGoldMakingGuide from "./pages/guides/UltimateGoldMakingGuide";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -26,17 +28,26 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/builds" element={<BuildsPage />} />
-          <Route path="/calculator" element={<ArmorCalculator />} />
-          <Route path="/guides/new-player" element={<NewPlayerGuide />} />
-          <Route path="/guides/pvp" element={<PvPGuide />} />
-          <Route path="/guides/opr-healing" element={<OPRHealingGuide />} />
-          <Route path="/guides/hive-gorgon" element={<HiveGorgonGuide />} />
-          <Route path="/guides/gold-making" element={<GoldMakingGuide />} />
-          <Route path="/tools/runglass" element={<RunglassCalculator />} />
-          <Route path="/tools/trophies" element={<TrophyCalculator />} />
-          <Route path="/tools/matrix" element={<MatrixCalculator />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/new-world-builds" element={<Builds />} />
+          
+          {/* Guide Routes */}
+          <Route path="/guides/new-world-new-player-guide" element={<NewPlayerGuide />} />
+          <Route path="/guides/new-world-end-game" element={<EndGameGuide />} />
+          <Route path="/guides/new-world-pvp-guide" element={<PvPGuide />} />
+          <Route path="/guides/new-world-opr-healing-guide" element={<OPRHealingGuide />} />
+          <Route path="/guides/new-world-hive-of-gorgon-guide" element={<HiveOfGorgonGuide />} />
+          <Route path="/guides/new-world-ultimate-gold-making-guide" element={<UltimateGoldMakingGuide />} />
+          
+          {/* Tool Routes */}
+          <Route path="/tools/new-world-armor-weight-calculator" element={<ArmorWeightCalculator />} />
+          <Route path="/tools/new-world-runeglass" element={<RunglassCalculator />} />
+          <Route path="/tools/new-world-trophies" element={<TrophyCalculator />} />
+          <Route path="/tools/new-world-matrix" element={<MatrixCalculator />} />
+          
+          {/* Admin Route */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          
+          {/* 404 Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
