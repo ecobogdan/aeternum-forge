@@ -435,7 +435,7 @@ export class ItemDataService {
     // PvP Reward
     const pvpRewards = this.take(d.pvpRewards, 10)
       .map((pv: any) => this.nonEmpty({
-        tags: this.strList(pv.tags),
+        tags: this.strList(pv.tags) || [],
         priceDat: pv.priceData
       }))
       .filter((entry: any) => Object.keys(entry).length > 0);
