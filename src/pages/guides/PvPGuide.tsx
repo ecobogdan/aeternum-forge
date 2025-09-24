@@ -74,6 +74,28 @@ const PvPGuide = () => {
         image: [`${siteUrl}/og-default.jpg`]
       }}
     ><div className="container px-4 py-8 space-y-8">
+
+        {/* Twitch Badge */}
+        <div className="flex justify-center">
+          <a
+            href="https://www.twitch.tv/llangi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-purple-600/90 text-white text-sm font-medium shadow-lg hover:bg-purple-700 transition text-center"
+          >
+            <svg
+              className="h-4 w-4 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2H8v-2H4V4h16v10z" />
+            </svg>
+            <span className="leading-none">Question? Watch me Live on Twitch!</span>
+          </a>
+        </div>
+
+
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center items-center space-x-2 text-sm text-muted-foreground">
@@ -122,6 +144,24 @@ const PvPGuide = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-12">
+            {/* PvP Video */}
+            <Card>
+              <CardContent className="prose prose-invert max-w-none space-y-4 p-6">
+                <div className="border-l-4 border-primary bg-muted/30 p-4 rounded">
+                  <p>How to ACTUALLY Be Good at PvP in New World Aeternum (Complete Guide 2025)</p>
+                </div>
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                  <iframe
+                    className="w-full h-full"
+                    src="https://www.youtube.com/embed/zvn55CRA4Vw?si=BKNUsR4I0vtC5qor"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              </CardContent>
+            </Card>
             {/* PvP Basics */}
             <section id="pvp-basics">
               <Card>

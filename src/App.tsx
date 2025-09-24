@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Builds from "./pages/Builds";
+import Database from "./pages/Database";
+import ItemDetail from "./pages/ItemDetail";
+import PerkDetail from "./pages/PerkDetail";
 import ArmorWeightCalculator from "./pages/ArmorWeightCalculator";
 import RunglassCalculator from "./pages/RunglassCalculator";
 import TrophyCalculator from "./pages/TrophyCalculator";
@@ -29,6 +32,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/new-world-builds" element={<Builds />} />
+          <Route path="/new-world-database" element={<Database />} />
+          <Route path="/new-world-database/item/:itemId" element={<ItemDetail />} />
+          <Route path="/new-world-database/perk/:perkId" element={<PerkDetail />} />
           
           {/* Guide Routes */}
           <Route path="/guides/new-world-new-player-guide" element={<NewPlayerGuide />} />

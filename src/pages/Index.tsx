@@ -79,6 +79,28 @@ const Index = () => {
           <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
         </div>
 
+
+        {/* Twitch Badge */}
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20">
+          <a
+            href="https://www.twitch.tv/llangi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-purple-600/90 text-white text-sm font-medium shadow-lg hover:bg-purple-700 transition text-center "
+          >
+            <svg
+              className="h-4 w-4 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2H8v-2H4V4h16v10z" />
+            </svg>
+            <span className="leading-none">Question? Watch me Live on Twitch!</span>
+          </a>
+        </div>
+
+
         {/* Hero Content */}
         <div className="relative z-10 container px-4 text-center">
           <div className="max-w-4xl mx-auto space-y-8">

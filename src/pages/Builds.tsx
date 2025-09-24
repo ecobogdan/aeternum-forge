@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
+import BuildsSidebar from '@/components/BuildsSidebar';
 import { siteUrl } from '@/config/seo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +9,10 @@ import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ExternalLink, Copy, Youtube, Star, ChevronDown, ChevronLeft, Check } from 'lucide-react';
+import { ExternalLink, Copy, Youtube, Star, ChevronDown, ChevronLeft, Check, Menu, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 import buildsData from '@/data/builds.json';
 
 const ALL_SUBCATEGORY_KEY = '__all__';
@@ -51,6 +54,21 @@ const Builds = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoadingBuilds, setIsLoadingBuilds] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const isMobile = useIsMobile();
+
+  // Set default sidebar state based on screen size
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false); // Hidden by default on mobile
+    } else {
+      setSidebarOpen(true); // Visible by default on desktop
+    }
+  }, [isMobile]);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -305,11 +323,7 @@ const handleBuildSelect = useCallback(
   [setSearchParams]
 );
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const [embedHeight, setEmbedHeight] = useState<number>(currentBuild?.iframeHeight || 900);
-
-  useEffect(() => {
-    setEmbedHeight(currentBuild?.iframeHeight || 900);
-  }, [currentBuild?.id, currentBuild?.iframeHeight]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -348,7 +362,21 @@ const handleBuildSelect = useCallback(
             : Number.NaN;
 
       if (Number.isFinite(numericHeight) && numericHeight > 0) {
-        setEmbedHeight(Math.ceil(numericHeight));
+        if (iframeRef.current && containerRef.current) {
+          // Set the iframe height to exactly match the content height
+          const exactHeight = Math.ceil(numericHeight);
+          iframeRef.current.style.height = `${exactHeight}px`;
+          
+          // Update the scaling container height to match the iframe
+          const scalingContainer = iframeRef.current.parentElement;
+          if (scalingContainer) {
+            scalingContainer.style.height = `${exactHeight}px`;
+          }
+          
+          // Update the outer container height to match the scaled content (70% of original)
+          const scaledHeight = Math.ceil(exactHeight * 0.7);
+          containerRef.current.style.height = `${scaledHeight}px`;
+        }
       }
     };
 
@@ -410,6 +438,8 @@ const handleBuildSelect = useCallback(
       .replace(/\n/g, '<br>');
   };
 
+  
+
   return (
     <Layout 
       title="S9 Builds - New World Builds"
@@ -427,6 +457,27 @@ const handleBuildSelect = useCallback(
         about: "New World builds"
       }}
     >
+
+          {/* Twitch Badge */}
+      <div className="flex justify-center">
+        <a
+          href="https://www.twitch.tv/llangi"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-purple-600/90 text-white text-sm font-medium shadow-lg hover:bg-purple-700 transition text-center"
+        >
+          <svg
+            className="h-4 w-4 flex-shrink-0"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2H8v-2H4V4h16v10z" />
+          </svg>
+          <span className="leading-none">Question? Watch me Live on Twitch!</span>
+        </a>
+      </div>
+
       <div className="container px-4 py-8 space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -439,8 +490,60 @@ const handleBuildSelect = useCallback(
           </p>
         </div>
 
-        {/* Build Selector & Filters */}
-      <div className="space-y-6">
+        
+
+        {/* Build Content Area with Sidebar */}
+        <div className="flex gap-6">
+          {/* Sidebar */}
+          <BuildsSidebar
+            builds={buildsMatchingTags}
+            categories={availableCategories}
+            selectedBuild={selectedBuild}
+            onBuildSelect={handleBuildSelect}
+            isOpen={sidebarOpen}
+            onToggle={toggleSidebar}
+          />
+          
+
+          {/* Floating Toggle Button - Only show when sidebar is closed */}
+          <div
+            className={cn(
+              "fixed left-2 md:left-4 top-32 z-30 transition-all duration-300 ease-in-out",
+              sidebarOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+            )}
+          >
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleSidebar}
+              className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-background/20 backdrop-blur-sm border border-border/40 hover:bg-background/40 transition-all duration-200 shadow-lg hover:shadow-xl"
+              title="Show builds navigation"
+            >
+              <ChevronRight className="h-4 w-4 md:h-5 md:w-5 text-foreground/70" />
+            </Button>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 space-y-6">
+            {/* Header with Toggle Button */}
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleSidebar}
+                className="lg:hidden"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+              <div>
+                <h2 className="text-xl font-semibold">Build Selector & Filters</h2>
+              </div>
+            </div>
+
+            
+
+            {/* Build Selector & Filters */}
+            <div className="space-y-6">
         {loadError && (
           <Card className="border-destructive/40 bg-destructive/10">
             <CardContent className="py-3">
@@ -616,17 +719,17 @@ const handleBuildSelect = useCallback(
 
             {/* Build Embed */}
             <Card>
-              <CardContent className="p-6 overflow-visible md:max-h-[80vh] md:overflow-y-auto">
+              <CardContent className="p-6 overflow-visible">
                 {currentBuild.embed === 'iframe' ? (
-                  <div className="w-full overflow-hidden" style={{ height: embedHeight * 0.8 }}>
-                    <div className="transform scale-[0.8] origin-top-left" style={{ width: '125%', height: '125%' }}>
+                  <div className="w-full overflow-hidden" ref={containerRef}>
+                    <div className="transform scale-[0.7] origin-top-left" style={{ width: '142.86%' }}>
                       <iframe
                         ref={iframeRef}
                         src={currentBuild.link}
                         width="100%"
-                        height={embedHeight}
-                        style={{ height: embedHeight }}
-                        className="border rounded-lg"
+                        height="100%"
+                        className="border rounded-lg w-full"
+                        style={{ height: '800px' }}
                         loading="lazy"
                         title={`${currentBuild.title} Build Planner`}
                       />
@@ -675,7 +778,7 @@ const handleBuildSelect = useCallback(
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-hidden" style={{ aspectRatio: '16/9', height: 'auto' }}>
-                    <div className="transform scale-[0.8] origin-top-left" style={{ width: '125%', height: '125%' }}>
+                    <div className="transform scale-[0.7] origin-top-left" style={{ width: '142.86%', height: '142.86%' }}>
                       <iframe
                         src={currentBuild.youtube.replace('watch?v=', 'embed/')}
                         width="100%"
@@ -728,6 +831,8 @@ const handleBuildSelect = useCallback(
             </div>
           </CardContent>
         </Card>
+          </div>
+        </div>
       </div>
     </Layout>
   );

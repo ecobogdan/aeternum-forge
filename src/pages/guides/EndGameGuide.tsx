@@ -67,6 +67,27 @@ const EndGameGuide = () => {
       }}
     >
       <div className="container px-4 py-8 space-y-8">
+
+        {/* Twitch Badge */}
+        <div className="flex justify-center">
+          <a
+            href="https://www.twitch.tv/llangi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full bg-purple-600/90 text-white text-sm font-medium shadow-lg hover:bg-purple-700 transition text-center"
+          >
+            <svg
+              className="h-4 w-4 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2H8v-2H4V4h16v10z" />
+            </svg>
+            <span className="leading-none">Question? Watch me Live on Twitch!</span>
+          </a>
+        </div>
+
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center items-center space-x-2 text-sm text-muted-foreground">
@@ -115,6 +136,24 @@ const EndGameGuide = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-12">
+            {/* End-Game Video */}
+            <Card>
+              <CardContent className="prose prose-invert max-w-none space-y-4 p-6">
+                <div className="border-l-4 border-primary bg-muted/30 p-4 rounded">
+                  <p>The REAL Endgame Starts Here – New World Aeternum Ultimate New Player Guide (2025)</p>
+                </div>
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                  <iframe
+                    className="w-full h-full"
+                    src="https://www.youtube.com/embed/MofT5Q_ck9U?si=D2fXMqJ3PJbjzl1-"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              </CardContent>
+            </Card>
             {/* End-Game Overview */}
             <section id="end-game-overview">
               <Card>
@@ -126,8 +165,8 @@ const EndGameGuide = () => {
                 </CardHeader>
                 <CardContent className="prose prose-invert max-w-none space-y-4">
                   <p>
-                    <h5 className="font-medium text-nature-green mb-1">Reached Level 65</h5>
-                    <h5 className="font-medium text-nature-green mb-1">Completed the Main Story Quest (MSQ)</h5>
+                    <span className="font-medium text-nature-green mb-1 block">Reached Level 65</span>
+                    <span className="font-medium text-nature-green mb-1 block">Completed the Main Story Quest (MSQ)</span>
                     And now you're wondering... What do I do next!?
                     <br></br><br></br>
                     New World's PvE content isn't very difficult, but there's still a lot to do. Your main PvE goal is to become strong enough to complete the Hive of the Gorgon raid. This raid is the primary source of 725 Gear Score (GS) items in the game.
@@ -136,7 +175,7 @@ const EndGameGuide = () => {
                   </p>
 
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-semibold mb-2 text-primary">Your End-Game Journey:</h5>
+                    <span className="font-semibold mb-2 text-primary block text-base">Your End-Game Journey:</span>
                     <p className="text-sm">
                       Focus on expeditions → chest runs → mutated expeditions → Gorgon raid. 
                       Each step builds upon the previous, preparing you for the ultimate PvE challenge.
@@ -177,7 +216,7 @@ const EndGameGuide = () => {
                   </div>
 
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-semibold mb-2 text-primary">Pro Tip:</h5>
+                    <span className="font-semibold mb-2 text-primary block text-base">Pro Tip:</span>
                     <p className="text-sm">
                       Always queue as Tank or Healer when possible for the bonus gold. 
                       These roles are often in high demand and will help you earn more gold faster.
@@ -212,7 +251,7 @@ const EndGameGuide = () => {
                   </ul>
 
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-semibold mb-2 text-primary">Pro Tip:</h5>
+                    <span className="font-semibold mb-2 text-primary block text-base">Pro Tip:</span>
                     <p className="text-sm">
                       Use a different weapon every time you join a chest run to easily level all your weapons to 20. 
                       This is an efficient way to master multiple weapon types while earning gear.
@@ -253,7 +292,7 @@ const EndGameGuide = () => {
                   </div>
 
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-semibold mb-2 text-primary">Strategy:</h5>
+                    <span className="font-semibold mb-2 text-primary block text-base">Strategy:</span>
                     <p className="text-sm">
                       Focus on the current week's mutations to maximize your artifact collection. 
                       Check which artifacts are available and prioritize those expeditions.
@@ -305,7 +344,7 @@ const EndGameGuide = () => {
                 </CardHeader>
                 <CardContent className="prose prose-invert max-w-none space-y-4">
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-medium text-nature-green mb-1">Gathering</h5>
+                    <span className="font-medium text-nature-green mb-1 block text-base">Gathering</span>
                     <p className="text-sm">
                       You'll need gold to support your progression. Gathering is one of the easiest and most consistent ways for new players to earn gold, 
                       especially in combination with daily expedition bonuses. Focus on gathering materials like wood, leather, fibers, and ore to either refine or sell at the Trading Post.
@@ -313,7 +352,7 @@ const EndGameGuide = () => {
                   </div>
 
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-medium text-nature-green mb-1">Crafting / Refining</h5>
+                    <span className="font-medium text-nature-green mb-1 block text-base">Crafting / Refining</span>
                     <div className="text-sm space-y-2">
                       <p>
                         New World features one of the best crafting systems in any MMORPG. As a
@@ -351,7 +390,7 @@ const EndGameGuide = () => {
                 </CardHeader>
                 <CardContent className="prose prose-invert max-w-none space-y-4">
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-medium text-nature-green mb-1">Smart Shopping</h5>
+                    <span className="font-medium text-nature-green mb-1 block text-base">Smart Shopping</span>
                     <div className="text-sm space-y-2">
                       <p>
                         As you farm gold, complete expeditions, and hunt for artifacts, always keep an eye on the Trading Post. 
@@ -387,7 +426,7 @@ const EndGameGuide = () => {
                 </CardHeader>
                 <CardContent className="prose prose-invert max-w-none space-y-4">
                   <div className="bg-muted/50 p-4 rounded-lg">
-                    <h5 className="font-medium text-nature-green mb-1">Housing Benefits</h5>
+                    <span className="font-medium text-nature-green mb-1 block text-base">Housing Benefits</span>
                     <div className="text-sm space-y-2">
                       <p>Houses in New World are more than just cosmetic, they offer:</p>
                       <ul className="list-disc pl-4 space-y-1">

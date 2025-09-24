@@ -17,7 +17,7 @@ const GROUPS = {
     { name: 'Angry Earth Combat Trophy', mote: 'Life Mote' },
     { name: 'Corrupted Combat Trophy', mote: 'Fire Mote' },
     { name: 'Lost Combat Trophy', mote: 'Soul Mote' },
-    { name: 'Beast Combat Trophy', mote: 'Air Mote' },
+    { name: 'Wildlife Combat Trophy', mote: 'Air Mote' },
     { name: 'Human Combat Trophy', mote: 'Death Mote' },
   ],
   crafting: [
@@ -33,6 +33,7 @@ const GROUPS = {
     { name: 'Logging Trophy', mote: 'Air Mote' },
     { name: 'Harvesting Trophy', mote: 'Life Mote' },
     { name: 'Skinning Trophy', mote: 'Death Mote' },
+    { name: 'Luck Trophy', mote: 'Rabbit Foot' },
   ],
 } as const;
 
@@ -44,7 +45,7 @@ const BASIC_MAT: Record<string, string> = {
   'Angry Earth Combat Trophy': 'Barkflesh',
   'Corrupted Combat Trophy': 'Corrupted Crest',
   'Lost Combat Trophy': 'Ectoplasmic Essence',
-  'Beast Combat Trophy': 'Pristine Wolf Claw',
+  'Wildlife Combat Trophy': 'Pristine Wolf Claw',
   'Human Combat Trophy': 'Human Digit',
   'Weaponsmithing Trophy': "Quartermaster's Notes",
   'Armoring Trophy': "Armorer's Journal",
@@ -56,6 +57,7 @@ const BASIC_MAT: Record<string, string> = {
   'Harvesting Trophy': 'Journal of Aeternum Flora',
   'Skinning Trophy': 'Notes on Aeternum Fauna',
   'Fishing Trophy': 'Taxidermied Blue',
+  'Luck Trophy': 'Stacked Deck',
 };
 
 const BASIC_EXTRAS: Record<string, { mat: string; qty: number }[]> = {
@@ -67,7 +69,7 @@ const MAJOR_MAT: Record<string, string> = {
   'Angry Earth Combat Trophy': 'Glowing Sap',
   'Corrupted Combat Trophy': 'Corrupted Totem',
   'Lost Combat Trophy': 'Ephemeral Seal',
-  'Beast Combat Trophy': 'Pristine Bear Claw',
+  'Wildlife Combat Trophy': 'Pristine Bear Claw',
   'Human Combat Trophy': 'Human Idol',
   'Weaponsmithing Trophy': "Forgemaster's Notes",
   'Armoring Trophy': 'Precision Armoring',
@@ -79,6 +81,7 @@ const MAJOR_MAT: Record<string, string> = {
   'Harvesting Trophy': 'Mercurial Token',
   'Skinning Trophy': "Tracker's Seal",
   'Fishing Trophy': 'Taxidermied Daemonaja',
+  'Luck Trophy': 'Loaded Dice',
 };
 
 const MAJOR_EXTRAS: Record<string, { mat: string; qty: number }[]> = {
@@ -121,7 +124,7 @@ const ALL_MATS = Array.from(
     'Glowing Sap', 'Pristine Bear Claw', 'Corrupted Totem', 'Ephemeral Seal', 'Human Idol', 'Ancient Mandible',
     "Forgemaster's Notes", 'Precision Armoring', 'Precision Engineering', "Philosopher's Stone",
     'Mercurial Token', "Tracker's Seal", 'Adamantine Dust', 'Pure Resin', 'Taxidermied Daemonaja',
-    'Flame Core',
+    'Flame Core', 'Rabbit Foot', 'Stacked Deck', 'Loaded Dice',
   ])
 ).sort();
 
@@ -134,7 +137,12 @@ function buildMats(group: GroupKey, trophyName: string, tier: 'minor' | 'basic' 
   if (!trophy) return mats; // safety for unexpected empty group
 
   if (tier === 'minor') {
-    mats.push({ mat: trophy.mote, qty: 25 });
+    // Special case for Luck Trophy - uses Rabbit Foot instead of Mote
+    if (trophy.name === 'Luck Trophy') {
+      mats.push({ mat: 'Rabbit Foot', qty: 1 });
+    } else {
+      mats.push({ mat: trophy.mote, qty: 25 });
+    }
     mats.push({ mat: 'Maple Stain', qty: 1 });
     mats.push({ mat: 'Lumber', qty: 25 });
     mats.push({ mat: 'Steel Ingot', qty: 20 });
