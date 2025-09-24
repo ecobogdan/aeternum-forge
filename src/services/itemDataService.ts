@@ -434,11 +434,11 @@ export class ItemDataService {
 
     // PvP Reward
     const pvpRewards = this.take(d.pvpRewards, 10)
-      .map((pv: any) => this.nonEmpty({
+      .map((pv: any) => ({
         tags: this.strList(pv.tags) || [],
         priceDat: pv.priceData
       }))
-      .filter((entry: any) => Object.keys(entry).length > 0);
+      .filter((entry: any) => entry.tags.length > 0 || entry.priceDat);
     
     if (pvpRewards.length > 0) {
       acq.pvpReward = pvpRewards;
@@ -583,10 +583,10 @@ export class ItemDataService {
           }
         }
 
-        return this.nonEmpty({
+        return {
           id: m.id,
           type: m.type,
-          name: m.name,
+          name: m.name || 'Unknown',
           level: m.Level,
           area: zone,
           areaId: zoneId,
@@ -595,7 +595,7 @@ export class ItemDataService {
           isMutatedExpedition: otherTags.includes('Mutated Expedition') || undefined,
           lootTagRestrictions: Object.keys(ltr).length > 0 ? ltr : undefined,
           link: this.entityLink(m)
-        });
+        };
       })
       .filter((entry: any) => Object.keys(entry).length > 0);
     
