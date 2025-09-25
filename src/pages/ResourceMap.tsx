@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Search, MapPin, Eye, EyeOff, Filter } from 'lucide-react';
+import { Search, MapPin, Eye, EyeOff, Filter, X, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -83,35 +81,56 @@ const resourceCategories = [
   }
 ];
 
-// Sample resource nodes data
+// Sample resource nodes data with game world coordinates
 const sampleNodes: ResourceNode[] = [
   {
     id: '1',
     name: 'Iron Deposit',
     type: 'Iron Ore',
     category: 'Farming',
-    coordinates: [-73.935242, 40.730610],
+    coordinates: [35, 45], // Percentage coordinates on the map image
     icon: '⛏️',
     region: 'Everfall',
     tier: 2,
     quantity: 5
   },
   {
-    id: '2', 
+    id: '2',
     name: 'Hemp Field',
     type: 'Hemp',
     category: 'Farming',
-    coordinates: [-73.925242, 40.740610],
+    coordinates: [50, 30],
     icon: '🌿',
     region: 'Windsward',
     tier: 1,
     quantity: 10
+  },
+  {
+    id: '3',
+    name: 'Elite Ancient Chest',
+    type: 'Elite Ancient Chest',
+    category: 'Chests',
+    coordinates: [25, 60],
+    icon: '⚱️',
+    region: 'Great Cleave',
+    tier: 5,
+    quantity: 1
+  },
+  {
+    id: '4',
+    name: 'Boss Spawn',
+    type: 'Boss',
+    category: 'Enemies',
+    coordinates: [70, 20],
+    icon: '👹',
+    region: 'Shattered Mountain',
+    tier: 5,
+    quantity: 1
   }
 ];
 
 const ResourceMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<L.Map | null>(null);
   const [selectedRegion, setSelectedRegion] = useState('All Regions');
   const [searchTerm, setSearchTerm] = useState('');
   const [showNodes, setShowNodes] = useState(true);
@@ -122,57 +141,53 @@ const ResourceMap = () => {
     Enemies: true,
     Farming: true
   });
-  const markers = useRef<L.Marker[]>([]);
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  useEffect(() => {
-    if (!mapContainer.current) return;
-
-    // Initialize map
-    map.current = L.map(mapContainer.current, {
-      preferCanvas: true,
-    }).setView([40.730610, -73.935242], 10);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
-    }).addTo(map.current);
-
-    // Create custom icon for markers
-    const createCustomIcon = (emoji: string) => L.divIcon({
-      html: `<div style="font-size: 20px; text-align: center; line-height: 1;">${emoji}</div>`,
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-      className: 'custom-resource-marker'
+  // Mouse and touch handlers for map interaction
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({ 
+      x: e.clientX - position.x, 
+      y: e.clientY - position.y 
     });
+  };
 
-    // Add sample markers
-    sampleNodes.forEach(node => {
-      if (map.current) {
-        const marker = L.marker([node.coordinates[1], node.coordinates[0]], {
-          icon: createCustomIcon(node.icon)
-        })
-          .bindPopup(`
-            <div class="p-2">
-              <h3 class="font-semibold">${node.name}</h3>
-              <p class="text-sm text-muted-foreground">${node.type}</p>
-              <p class="text-xs">${node.region}</p>
-              ${node.quantity ? `<p class="text-xs">Quantity: ${node.quantity}</p>` : ''}
-            </div>
-          `)
-          .addTo(map.current);
-        
-        markers.current.push(marker);
-      }
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
     });
+  };
 
-    // Cleanup
-    return () => {
-      markers.current.forEach(marker => marker.remove());
-      markers.current = [];
-      map.current?.remove();
-    };
-  }, []);
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY * -0.001;
+    const newZoom = Math.min(Math.max(0.5, zoom + delta), 3);
+    setZoom(newZoom);
+  };
+
+  const filteredNodes = sampleNodes.filter(node => {
+    const matchesSearch = !searchTerm || 
+      node.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      node.type.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesRegion = selectedRegion === 'All Regions' || 
+      node.region === selectedRegion;
+    
+    const matchesCategory = enabledCategories[node.category];
+    
+    return matchesSearch && matchesRegion && matchesCategory && showNodes;
+  });
 
   const toggleCategory = (categoryName: string) => {
     setEnabledCategories(prev => ({
@@ -191,14 +206,23 @@ const ResourceMap = () => {
 
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background flex overflow-hidden">
       {/* Sidebar */}
-      <div className="w-80 bg-card border-r border-border overflow-y-auto">
+      <div className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 bg-card border-r border-border overflow-hidden flex flex-col`}>
         <div className="p-4 border-b border-border">
-          <h1 className="text-xl font-bold mb-4 flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-primary" />
-            Resource Map
-          </h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              Aeternum Map
+            </h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
           
           {/* Controls */}
           <div className="space-y-3 mb-4">
@@ -226,7 +250,7 @@ const ResourceMap = () => {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-popover border border-border z-50">
                 {regions.map(region => (
                   <SelectItem key={region} value={region}>
                     {region}
@@ -270,7 +294,7 @@ const ResourceMap = () => {
         </div>
 
         {/* Resource Categories */}
-        <div className="p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {resourceCategories.map((category) => (
             <div key={category.name}>
               <div className="flex items-center justify-between mb-3">
@@ -317,21 +341,106 @@ const ResourceMap = () => {
       </div>
 
       {/* Map Container */}
-      <div className="flex-1 relative">
-        <div ref={mapContainer} className="absolute inset-0" />
+      <div className="flex-1 relative overflow-hidden bg-slate-900">
+        {!sidebarOpen && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="absolute top-4 left-4 z-20"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Filter className="h-4 w-4" />
+          </Button>
+        )}
         
-        {/* Map Overlay UI */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
+        {/* Map Controls */}
+        <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setZoom(Math.min(zoom + 0.2, 3))}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setZoom(Math.max(zoom - 0.2, 0.5))}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Game World Map */}
+        <div 
+          className="absolute inset-0 cursor-move select-none"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onWheel={handleWheel}
+        >
+          <div
+            className="relative"
+            style={{
+              transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+              transformOrigin: 'center center',
+              width: '200%',
+              height: '200%',
+              backgroundImage: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
+              backgroundSize: '100px 100px',
+              backgroundPosition: '0 0, 50px 50px'
+            }}
+          >
+            {/* Placeholder map background - replace with actual New World map image */}
+            <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-700 relative">
+              <div className="absolute inset-0 opacity-20">
+                <div className="w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]"></div>
+              </div>
+              
+              {/* Region Labels */}
+              <div className="absolute top-1/4 left-1/4 text-white/60 font-semibold text-sm">Windsward</div>
+              <div className="absolute top-1/3 left-1/2 text-white/60 font-semibold text-sm">Everfall</div>
+              <div className="absolute top-1/2 right-1/4 text-white/60 font-semibold text-sm">Brightwood</div>
+              <div className="absolute bottom-1/4 left-1/3 text-white/60 font-semibold text-sm">Great Cleave</div>
+              
+              {/* Resource Nodes */}
+              {filteredNodes.map((node) => (
+                <div
+                  key={node.id}
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer hover:scale-110 transition-transform group"
+                  style={{
+                    left: `${node.coordinates[0]}%`,
+                    top: `${node.coordinates[1]}%`
+                  }}
+                  title={`${node.name} - ${node.type}`}
+                >
+                  <div className="text-2xl drop-shadow-lg">{node.icon}</div>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                    {node.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Map Info */}
+        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end pointer-events-none">
           <Card className="pointer-events-auto">
             <CardContent className="p-3">
               <div className="flex items-center gap-2 text-sm">
                 <Filter className="h-4 w-4" />
                 <span className="font-medium">
-                  {Object.values(enabledCategories).filter(Boolean).length} categories active
+                  {filteredNodes.length} nodes • {Object.values(enabledCategories).filter(Boolean).length} categories
                 </span>
               </div>
             </CardContent>
           </Card>
+          
+          <div className="text-xs text-muted-foreground pointer-events-auto">
+            Zoom: {Math.round(zoom * 100)}%
+          </div>
         </div>
       </div>
     </div>
