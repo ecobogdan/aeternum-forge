@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { Search, MapPin, Eye, EyeOff, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -111,7 +111,7 @@ const sampleNodes: ResourceNode[] = [
 
 const ResourceMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<L.Map | null>(null);
   const [selectedRegion, setSelectedRegion] = useState('All Regions');
   const [searchTerm, setSearchTerm] = useState('');
   const [showNodes, setShowNodes] = useState(true);
@@ -122,62 +122,57 @@ const ResourceMap = () => {
     Enemies: true,
     Farming: true
   });
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
+  const markers = useRef<L.Marker[]>([]);
 
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
+    if (!mapContainer.current) return;
 
     // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: [-73.935242, 40.730610], // Default center
-      zoom: 10,
-      pitch: 0,
-    });
+    map.current = L.map(mapContainer.current, {
+      preferCanvas: true,
+    }).setView([40.730610, -73.935242], 10);
 
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(map.current);
+
+    // Create custom icon for markers
+    const createCustomIcon = (emoji: string) => L.divIcon({
+      html: `<div style="font-size: 20px; text-align: center; line-height: 1;">${emoji}</div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+      className: 'custom-resource-marker'
+    });
 
     // Add sample markers
     sampleNodes.forEach(node => {
       if (map.current) {
-        const el = document.createElement('div');
-        el.className = 'resource-marker';
-        el.innerHTML = node.icon;
-        el.style.fontSize = '20px';
-        el.style.cursor = 'pointer';
-
-        new mapboxgl.Marker(el)
-          .setLngLat(node.coordinates)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 })
-              .setHTML(`
-                <div class="p-2">
-                  <h3 class="font-semibold">${node.name}</h3>
-                  <p class="text-sm text-muted-foreground">${node.type}</p>
-                  <p class="text-xs">${node.region}</p>
-                  ${node.quantity ? `<p class="text-xs">Quantity: ${node.quantity}</p>` : ''}
-                </div>
-              `)
-          )
+        const marker = L.marker([node.coordinates[1], node.coordinates[0]], {
+          icon: createCustomIcon(node.icon)
+        })
+          .bindPopup(`
+            <div class="p-2">
+              <h3 class="font-semibold">${node.name}</h3>
+              <p class="text-sm text-muted-foreground">${node.type}</p>
+              <p class="text-xs">${node.region}</p>
+              ${node.quantity ? `<p class="text-xs">Quantity: ${node.quantity}</p>` : ''}
+            </div>
+          `)
           .addTo(map.current);
+        
+        markers.current.push(marker);
       }
     });
 
     // Cleanup
     return () => {
+      markers.current.forEach(marker => marker.remove());
+      markers.current = [];
       map.current?.remove();
     };
-  }, [mapboxToken]);
+  }, []);
 
   const toggleCategory = (categoryName: string) => {
     setEnabledCategories(prev => ({
@@ -194,44 +189,6 @@ const ResourceMap = () => {
     setEnabledCategories(newCategories);
   };
 
-  if (showTokenInput) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6">
-            <div className="text-center mb-6">
-              <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h1 className="text-2xl font-bold mb-2">Resource Map</h1>
-              <p className="text-muted-foreground text-sm">
-                Enter your Mapbox public token to view the interactive resource map
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Input
-                type="text"
-                placeholder="pk.eyJ1IjoieW91ciB1c2VybmFtZSIsImEiOiJ..."
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-              />
-              <Button 
-                onClick={() => mapboxToken && setShowTokenInput(false)}
-                className="w-full"
-                disabled={!mapboxToken}
-              >
-                Load Map
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                Get your free token at{' '}
-                <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                  mapbox.com
-                </a>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background flex">
