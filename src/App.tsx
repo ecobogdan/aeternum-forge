@@ -19,6 +19,7 @@ import OPRHealingGuide from "./pages/guides/OPRHealingGuide";
 import HiveOfGorgonGuide from "./pages/guides/HiveOfGorgonGuide";
 import UltimateGoldMakingGuide from "./pages/guides/UltimateGoldMakingGuide";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import ResourceMap from "./pages/ResourceMap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,9 @@ const App = () => (
           
           {/* Admin Route */}
           <Route path="/admin" element={<AdminDashboard />} />
+          
+          {/* Resource Map Route */}
+          <Route path="/resource-map" element={<ResourceMap />} />
           
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />
