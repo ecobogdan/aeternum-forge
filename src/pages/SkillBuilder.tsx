@@ -1,153 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Camera, RotateCcw } from 'lucide-react';
-
-// Weapon data with skill trees
-const WEAPONS = {
-  'Flail': {
-    trees: {
-      'CLERIC': { skills: [], maxPoints: 20 },
-      'BASTION': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Greatsword': {
-    trees: {
-      'ONSLAUGHT': { skills: [], maxPoints: 20 },
-      'DEFIANCE': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Sword': {
-    trees: {
-      'SWORDMASTER': { skills: [], maxPoints: 20 },
-      'DEFENDER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Rapier': {
-    trees: {
-      'BLOOD': { skills: [], maxPoints: 20 },
-      'GRACE': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Fire Staff': {
-    trees: {
-      'FIRE': { skills: [], maxPoints: 20 },
-      'PYROMANCER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Life Staff': {
-    trees: {
-      'HEALING': { skills: [], maxPoints: 20 },
-      'PROTECTING': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Bow': {
-    trees: {
-      'SKIRMISHER': { skills: [], maxPoints: 20 },
-      'HUNTER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'War Hammer': {
-    trees: {
-      'JUGGERNAUT': { skills: [], maxPoints: 20 },
-      'CROWD CRUSHER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Musket': {
-    trees: {
-      'SHARPSHOOTER': { skills: [], maxPoints: 20 },
-      'TRAPPER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Hatchet': {
-    trees: {
-      'BERSERKER': { skills: [], maxPoints: 20 },
-      'THROWING': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Blunderbuss': {
-    trees: {
-      'CHAOS': { skills: [], maxPoints: 20 },
-      'NET': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Great Axe': {
-    trees: {
-      'REAPER': { skills: [], maxPoints: 20 },
-      'MAULER': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Ice Gauntlet': {
-    trees: {
-      'BUILDER': { skills: [], maxPoints: 20 },
-      'ICE TEMPEST': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Void Gauntlet': {
-    trees: {
-      'ANNIHILATION': { skills: [], maxPoints: 20 },
-      'DECAY': { skills: [], maxPoints: 20 }
-    }
-  },
-  'Spear': {
-    trees: {
-      'ZONER': { skills: [], maxPoints: 20 },
-      'IMPALER': { skills: [], maxPoints: 20 }
-    }
-  }
-};
-
-// Sample skill node structure for demonstration
-const SAMPLE_SKILLS = [
-  { id: 1, name: 'Skill 1', tier: 1, position: { x: 2, y: 0 }, icon: '⚔️', maxRank: 1 },
-  { id: 2, name: 'Skill 2', tier: 2, position: { x: 1, y: 1 }, icon: '🛡️', maxRank: 3 },
-  { id: 3, name: 'Skill 3', tier: 2, position: { x: 3, y: 1 }, icon: '💥', maxRank: 1 },
-  { id: 4, name: 'Skill 4', tier: 3, position: { x: 0, y: 2 }, icon: '🔥', maxRank: 1 },
-  { id: 5, name: 'Skill 5', tier: 3, position: { x: 2, y: 2 }, icon: '⚡', maxRank: 1 },
-  { id: 6, name: 'Skill 6', tier: 3, position: { x: 4, y: 2 }, icon: '🌟', maxRank: 1 },
-  { id: 7, name: 'Ultimate', tier: 4, position: { x: 2, y: 3 }, icon: '💀', maxRank: 1 },
-];
+import { Camera, RotateCcw, ExternalLink } from 'lucide-react';
+import { nwdbSkillService, NWDBSkill, SkillTree } from '@/services/nwdbSkillService';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SkillAllocation {
   [weaponName: string]: {
-    [treeName: string]: {
-      [skillId: number]: number;
-    };
+    [skillId: string]: number;
   };
 }
 
 const SkillBuilder = () => {
-  const [selectedWeapon, setSelectedWeapon] = useState('Flail');
+  const [skillTrees, setSkillTrees] = useState<{ [weaponName: string]: SkillTree[] }>({});
+  const [selectedWeapon, setSelectedWeapon] = useState<string>('Bow');
   const [skillAllocations, setSkillAllocations] = useState<SkillAllocation>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadSkillData();
+  }, []);
+
+  const loadSkillData = async () => {
+    try {
+      setLoading(true);
+      const trees = await nwdbSkillService.getSkillTreesByWeapon();
+      setSkillTrees(trees);
+      
+      // Set first available weapon as default
+      const weapons = Object.keys(trees);
+      if (weapons.length > 0 && !trees[selectedWeapon]) {
+        setSelectedWeapon(weapons[0]);
+      }
+    } catch (err) {
+      setError('Failed to load skill data');
+      console.error('Error loading skills:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getWeaponPoints = (weaponName: string) => {
     const weaponAllocation = skillAllocations[weaponName] || {};
-    let totalPoints = 0;
-    Object.values(weaponAllocation).forEach(tree => {
-      Object.values(tree as any).forEach((points: number) => {
-        totalPoints += points;
-      });
-    });
-    return totalPoints;
+    return Object.values(weaponAllocation).reduce((sum: number, points: number) => sum + points, 0);
   };
 
-  const getTreePoints = (weaponName: string, treeName: string) => {
-    const treeAllocation = skillAllocations[weaponName]?.[treeName] || {};
-    return Object.values(treeAllocation).reduce((sum: number, points: number) => sum + points, 0);
+  const getSkillPoints = (weaponName: string, skillId: string) => {
+    return skillAllocations[weaponName]?.[skillId] || 0;
   };
 
-  const getSkillPoints = (weaponName: string, treeName: string, skillId: number) => {
-    return skillAllocations[weaponName]?.[treeName]?.[skillId] || 0;
+  const getMaxSkillRank = (skill: NWDBSkill) => {
+    // Main abilities and ultimates are usually 1 point
+    if (skill.UICategory === 'Attack' || skill.id.includes('ultimate_')) {
+      return 1;
+    }
+    // Upgrades are usually 1 point
+    if (skill.id.includes('upgrade_')) {
+      return 1;
+    }
+    // Passives can be multi-rank
+    return skill.id.includes('passive_') ? 3 : 1;
   };
 
-  const allocateSkillPoint = (weaponName: string, treeName: string, skillId: number, increment: boolean = true) => {
-    const currentPoints = getSkillPoints(weaponName, treeName, skillId);
-    const skill = SAMPLE_SKILLS.find(s => s.id === skillId);
+  const allocateSkillPoint = (weaponName: string, skillId: string, increment: boolean = true) => {
+    const currentPoints = getSkillPoints(weaponName, skillId);
+    const skill = findSkillById(skillId);
     if (!skill) return;
 
+    const maxRank = getMaxSkillRank(skill);
     let newPoints = currentPoints;
-    if (increment && currentPoints < skill.maxRank) {
+
+    if (increment && currentPoints < maxRank) {
       newPoints = currentPoints + 1;
     } else if (!increment && currentPoints > 0) {
       newPoints = currentPoints - 1;
@@ -158,33 +84,138 @@ const SkillBuilder = () => {
         ...prev,
         [weaponName]: {
           ...prev[weaponName],
-          [treeName]: {
-            ...prev[weaponName]?.[treeName],
-            [skillId]: newPoints
-          }
+          [skillId]: newPoints
         }
       }));
     }
+  };
+
+  const findSkillById = (skillId: string): NWDBSkill | null => {
+    for (const weapon of Object.values(skillTrees)) {
+      for (const tree of weapon) {
+        const skill = tree.skills.find(s => s.id === skillId);
+        if (skill) return skill;
+      }
+    }
+    return null;
   };
 
   const resetAllSkills = () => {
     setSkillAllocations({});
   };
 
+  const resetWeaponSkills = (weaponName: string) => {
+    setSkillAllocations(prev => ({
+      ...prev,
+      [weaponName]: {}
+    }));
+  };
+
   const takeScreenshot = () => {
-    // Placeholder for screenshot functionality
+    // Implementation would capture the skill trees
     console.log('Taking screenshot...');
   };
 
-  const renderSkillTree = (weaponName: string, treeName: string) => {
-    const treePoints = getTreePoints(weaponName, treeName);
-    
+  const renderSkillNode = (skill: NWDBSkill, weaponName: string, position: { row: number; col: number }) => {
+    const currentPoints = getSkillPoints(weaponName, skill.id);
+    const maxRank = getMaxSkillRank(skill);
+    const isActive = currentPoints > 0;
+    const isMaxed = currentPoints >= maxRank;
+    const iconUrl = nwdbSkillService.getSkillIconUrl(skill.icon);
+
     return (
-      <div className="relative bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white tracking-wider">
-            {treeName}
-          </h3>
+      <TooltipProvider key={skill.id}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className="absolute cursor-pointer group"
+              style={{
+                left: `${position.col * 90 + 45}px`,
+                top: `${position.row * 90 + 45}px`,
+                transform: 'translate(-50%, -50%)'
+              }}
+              onClick={() => allocateSkillPoint(weaponName, skill.id, true)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                allocateSkillPoint(weaponName, skill.id, false);
+              }}
+            >
+              <div className={`
+                w-16 h-16 rounded-full border-2 flex items-center justify-center
+                transition-all duration-200 hover:scale-110 relative overflow-hidden
+                ${isActive 
+                  ? isMaxed 
+                    ? 'border-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30' 
+                    : 'border-blue-400 bg-blue-400/20 shadow-lg shadow-blue-400/30'
+                  : 'border-slate-600 bg-slate-800/80 hover:border-slate-500'
+                }
+              `}>
+                <img 
+                  src={iconUrl}
+                  alt={skill.name}
+                  className={`w-10 h-10 object-contain ${isActive ? '' : 'opacity-60 grayscale'}`}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = `<span class="text-xs text-center">${skill.name.slice(0, 3)}</span>`;
+                  }}
+                />
+                
+                {/* Ultimate indicator */}
+                {skill.id.includes('ultimate_') && (
+                  <div className="absolute inset-0 border-2 border-purple-500 rounded-full animate-pulse"></div>
+                )}
+              </div>
+              
+              {/* Points indicator */}
+              {currentPoints > 0 && (
+                <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold z-10">
+                  {maxRank > 1 ? `${currentPoints}/${maxRank}` : '✓'}
+                </div>
+              )}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent 
+            className="max-w-sm p-4 bg-slate-900 border border-slate-700"
+            side="top"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <h4 className="font-semibold text-white">{skill.name}</h4>
+                {skill.cooldown && (
+                  <Badge variant="outline" className="text-xs">
+                    {skill.cooldown}s CD
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                {skill.description.replace(/\$\{[\d.]+\}/g, (match) => {
+                  return match.slice(2, -1); // Remove ${ and }
+                })}
+              </p>
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-400">{skill.UICategory}</span>
+                <span className="text-slate-400">{currentPoints}/{maxRank} points</span>
+              </div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  };
+
+  const renderSkillTree = (tree: SkillTree, weaponName: string) => {
+    const organizedSkills = nwdbSkillService.organizeSkillsForTree(tree.skills);
+    const treePoints = tree.skills.reduce((sum, skill) => sum + getSkillPoints(weaponName, skill.id), 0);
+
+    return (
+      <div key={tree.name} className="relative bg-slate-800/50 rounded-lg border border-slate-700 overflow-hidden">
+        <div className="flex items-center justify-between p-4 bg-slate-800/80 border-b border-slate-700">
+          <div>
+            <h3 className="text-lg font-bold text-white tracking-wider uppercase">
+              {tree.name}
+            </h3>
+            <p className="text-sm text-slate-400">{tree.weapon}</p>
+          </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="bg-slate-700 text-white border-slate-600">
               {treePoints}
@@ -192,16 +223,16 @@ const SkillBuilder = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+              className="text-red-400 hover:text-red-300 hover:bg-red-900/20 h-8 w-8 p-0"
               onClick={() => {
                 // Reset this tree
-                setSkillAllocations(prev => ({
-                  ...prev,
-                  [weaponName]: {
-                    ...prev[weaponName],
-                    [treeName]: {}
-                  }
-                }));
+                const newAllocations = { ...skillAllocations };
+                if (newAllocations[weaponName]) {
+                  tree.skills.forEach(skill => {
+                    delete newAllocations[weaponName][skill.id];
+                  });
+                  setSkillAllocations(newAllocations);
+                }
               }}
             >
               <RotateCcw className="h-4 w-4" />
@@ -210,67 +241,67 @@ const SkillBuilder = () => {
         </div>
 
         {/* Skill Tree Grid */}
-        <div className="relative" style={{ height: '350px', width: '100%' }}>
-          <div className="absolute inset-0">
-            {/* Grid background */}
-            <div className="grid grid-cols-5 gap-4 h-full w-full">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <div key={i} className="border border-slate-700/30 rounded"></div>
-              ))}
-            </div>
-
-            {/* Skill Nodes */}
-            {SAMPLE_SKILLS.map((skill) => {
-              const currentPoints = getSkillPoints(weaponName, treeName, skill.id);
-              const isActive = currentPoints > 0;
-              const isMaxed = currentPoints >= skill.maxRank;
-              
-              return (
+        <div className="relative p-6" style={{ height: '500px', width: '100%' }}>
+          {/* Grid background */}
+          <div className="absolute inset-0 opacity-20">
+            {Array.from({ length: 6 }).map((_, row) =>
+              Array.from({ length: 5 }).map((_, col) => (
                 <div
-                  key={skill.id}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                  key={`${row}-${col}`}
+                  className="absolute border border-slate-700/30 rounded"
                   style={{
-                    left: `${(skill.position.x + 1) * 20}%`,
-                    top: `${(skill.position.y + 1) * 25}%`
+                    left: `${col * 90}px`,
+                    top: `${row * 90}px`,
+                    width: '80px',
+                    height: '80px'
                   }}
-                  onClick={() => allocateSkillPoint(weaponName, treeName, skill.id, true)}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    allocateSkillPoint(weaponName, treeName, skill.id, false);
-                  }}
-                >
-                  <div className={`
-                    w-16 h-16 rounded-full border-2 flex items-center justify-center text-2xl
-                    transition-all duration-200 hover:scale-110
-                    ${isActive 
-                      ? isMaxed 
-                        ? 'border-yellow-400 bg-yellow-400/20 text-yellow-400' 
-                        : 'border-blue-400 bg-blue-400/20 text-blue-400'
-                      : 'border-slate-600 bg-slate-700/50 text-slate-400 hover:border-slate-500'
-                    }
-                  `}>
-                    {skill.icon}
-                  </div>
-                  
-                  {/* Points indicator */}
-                  {currentPoints > 0 && (
-                    <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                      {currentPoints}
-                    </div>
-                  )}
-
-                  {/* Tooltip */}
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
-                    {skill.name} ({currentPoints}/{skill.maxRank})
-                  </div>
-                </div>
-              );
-            })}
+                />
+              ))
+            )}
           </div>
+
+          {/* Skill Nodes */}
+          {organizedSkills.map((skill) => 
+            renderSkillNode(skill, weaponName, skill.position)
+          )}
         </div>
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold mb-4">New World Skill Builder</h1>
+            <Skeleton className="h-4 w-64 mx-auto bg-slate-800" />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            <Skeleton className="h-96 bg-slate-800" />
+            <Skeleton className="h-96 bg-slate-800" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4 text-red-400">Failed to Load Skill Data</h1>
+          <p className="text-slate-400 mb-4">{error}</p>
+          <Button onClick={loadSkillData} variant="outline">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const availableWeapons = Object.keys(skillTrees);
+  const selectedWeaponTrees = skillTrees[selectedWeapon] || [];
 
   return (
     <div className="min-h-screen bg-slate-900 text-white">
@@ -280,8 +311,13 @@ const SkillBuilder = () => {
           <h1 className="text-4xl font-bold mb-4">New World Skill Builder</h1>
           <p className="text-slate-400">
             Click{' '}
-            <a href="#" className="text-blue-400 hover:text-blue-300 underline">
-              here
+            <a 
+              href="https://nwdb.info/experience-table/attribute-bonuses" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+            >
+              here <ExternalLink className="w-3 h-3" />
             </a>{' '}
             to view the Attribute bonuses
           </p>
@@ -289,7 +325,7 @@ const SkillBuilder = () => {
 
         {/* Weapon Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {Object.keys(WEAPONS).map((weaponName) => {
+          {availableWeapons.map((weaponName) => {
             const points = getWeaponPoints(weaponName);
             return (
               <Button
@@ -298,7 +334,7 @@ const SkillBuilder = () => {
                 className={`
                   relative px-4 py-2 text-sm font-medium transition-colors
                   ${selectedWeapon === weaponName 
-                    ? 'bg-primary text-primary-foreground' 
+                    ? 'bg-primary text-primary-foreground shadow-lg' 
                     : 'bg-slate-800 text-slate-300 border-slate-600 hover:bg-slate-700'
                   }
                 `}
@@ -334,22 +370,25 @@ const SkillBuilder = () => {
             <RotateCcw className="w-4 h-4 mr-2" />
             Reset Skills
           </Button>
+          <Button 
+            variant="outline" 
+            onClick={() => resetWeaponSkills(selectedWeapon)}
+            className="bg-slate-800 border-slate-600 text-slate-300 hover:bg-slate-700"
+          >
+            Reset {selectedWeapon}
+          </Button>
         </div>
 
         {/* Skill Trees */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
-          {Object.entries(WEAPONS[selectedWeapon as keyof typeof WEAPONS].trees).map(([treeName]) => (
-            <Card key={treeName} className="bg-slate-800 border-slate-700">
-              <CardContent className="p-0">
-                {renderSkillTree(selectedWeapon, treeName)}
-              </CardContent>
-            </Card>
-          ))}
+          {selectedWeaponTrees.map(tree => renderSkillTree(tree, selectedWeapon))}
         </div>
 
         {/* Instructions */}
-        <div className="text-center mt-8 text-slate-400 text-sm">
+        <div className="text-center mt-8 text-slate-400 text-sm space-y-2">
           <p>Left click to add points • Right click to remove points</p>
+          <p>Hover over skills to see detailed descriptions</p>
+          <p className="text-xs">Data sourced from NWDB.info</p>
         </div>
       </div>
     </div>
