@@ -20,6 +20,7 @@ import HiveOfGorgonGuide from "./pages/guides/HiveOfGorgonGuide";
 import UltimateGoldMakingGuide from "./pages/guides/UltimateGoldMakingGuide";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ResourceMap from "./pages/ResourceMap";
+import SkillBuilder from "./pages/SkillBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,9 @@ const App = () => (
           
           {/* Resource Map Route */}
           <Route path="/resource-map" element={<ResourceMap />} />
+          
+          {/* Skill Builder Route */}
+          <Route path="/skill-builder" element={<SkillBuilder />} />
           
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />
