@@ -230,116 +230,141 @@ const Database = () => {
     <Layout>
       <div className="flex min-h-screen w-full bg-background">
         {/* Left Sidebar */}
-        <aside className="w-60 border-r border-border bg-card p-4 overflow-y-auto">
-          <div className="mb-4">
-            <h2 className="text-sm font-semibold text-muted-foreground mb-2">Filter</h2>
-            <Button
-              variant="outline"
-              className="w-full justify-start text-sm"
-              size="sm"
-            >
-              Added In Patch
-              <ChevronDown className="ml-auto h-4 w-4" />
-            </Button>
+        <aside className="w-64 border-r border-border/50 bg-gradient-to-b from-card via-card to-card/80 backdrop-blur-sm overflow-y-auto shadow-xl">
+          <div className="p-6 border-b border-border/50">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-gold-primary to-gold-secondary bg-clip-text text-transparent mb-1">
+              Database
+            </h1>
+            <p className="text-xs text-muted-foreground">Explore Aeternum's items</p>
           </div>
 
-          <nav className="space-y-1">
-            {categories.map(category => (
-              <div key={category.id}>
-                <button
-                  onClick={() => toggleCategory(category.id)}
-                  className="flex items-center w-full px-2 py-1.5 text-sm hover:bg-accent rounded-md transition-colors"
-                >
-                  <ChevronRightIcon
-                    className={cn(
-                      'h-4 w-4 mr-1 transition-transform',
-                      expandedCategories.has(category.id) && 'rotate-90'
-                    )}
-                  />
-                  <category.icon className="h-4 w-4 mr-2" />
-                  <span className="font-medium">{category.name}</span>
-                </button>
+          <div className="p-4">
+            <div className="mb-6">
+              <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Filter</h2>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-sm hover:bg-accent/50 hover:border-primary/50 transition-all"
+                size="sm"
+              >
+                <Sparkles className="h-3.5 w-3.5 mr-2 text-primary" />
+                Added In Patch
+                <ChevronDown className="ml-auto h-4 w-4" />
+              </Button>
+            </div>
 
-                {expandedCategories.has(category.id) && category.subcategories && (
-                  <div className="ml-6 mt-1 space-y-1">
-                    {category.subcategories.map(sub => (
-                      <button
-                        key={sub.id}
-                        onClick={() => {
-                          setSelectedCategory(sub.id);
-                          setCurrentPage(1);
-                        }}
-                        className={cn(
-                          'flex items-center w-full px-2 py-1.5 text-sm rounded-md transition-colors',
-                          selectedCategory === sub.id
-                            ? 'bg-primary text-primary-foreground'
-                            : 'hover:bg-accent'
-                        )}
-                      >
-                        <sub.icon className="h-4 w-4 mr-2" />
-                        <span>{sub.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
+            <nav className="space-y-2">
+              {categories.map(category => (
+                <div key={category.id}>
+                  <button
+                    onClick={() => toggleCategory(category.id)}
+                    className="flex items-center w-full px-3 py-2.5 text-sm font-medium hover:bg-accent/50 rounded-lg transition-all group"
+                  >
+                    <ChevronRightIcon
+                      className={cn(
+                        'h-4 w-4 mr-2 transition-all text-muted-foreground group-hover:text-primary',
+                        expandedCategories.has(category.id) && 'rotate-90 text-primary'
+                      )}
+                    />
+                    <category.icon className="h-4 w-4 mr-2 text-primary" />
+                    <span>{category.name}</span>
+                  </button>
+
+                  {expandedCategories.has(category.id) && category.subcategories && (
+                    <div className="ml-8 mt-1 space-y-1 animate-accordion-down">
+                      {category.subcategories.map(sub => (
+                        <button
+                          key={sub.id}
+                          onClick={() => {
+                            setSelectedCategory(sub.id);
+                            setCurrentPage(1);
+                          }}
+                          className={cn(
+                            'flex items-center w-full px-3 py-2 text-sm rounded-lg transition-all',
+                            selectedCategory === sub.id
+                              ? 'bg-gradient-to-r from-primary/20 to-gold-secondary/10 border border-primary/30 text-primary font-medium shadow-sm'
+                              : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'
+                          )}
+                        >
+                          <sub.icon className={cn(
+                            "h-4 w-4 mr-2",
+                            selectedCategory === sub.id ? "text-primary" : ""
+                          )} />
+                          <span>{sub.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
-          {/* Search Bar */}
-          <div className="mb-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <main className="flex-1 p-8 bg-gradient-to-br from-background via-background to-background/95">
+          {/* Header with Search */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  {categories.find(c => c.subcategories?.find(s => s.id === selectedCategory))
+                    ?.subcategories?.find(s => s.id === selectedCategory)?.name || 'All Items'}
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {filteredItems.length} items found
+                </p>
+              </div>
+            </div>
+            
+            <div className="relative max-w-xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
-                placeholder="Search items..."
+                placeholder="Search for items, weapons, armor..."
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="pl-10"
+                className="pl-12 h-12 bg-card/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all shadow-sm"
               />
             </div>
           </div>
 
           {/* Table Header */}
-          <div className="bg-card border border-border rounded-t-lg">
-            <div className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-4 py-3 border-b border-border font-medium text-sm">
+          <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-t-xl shadow-lg overflow-hidden">
+            <div className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-6 py-4 bg-gradient-to-r from-secondary/50 to-secondary/30 border-b border-border/50 font-semibold text-sm uppercase tracking-wider">
               <div className="w-12"></div>
               <button
                 onClick={() => handleSort('name')}
-                className="flex items-center hover:text-primary transition-colors text-left"
+                className="flex items-center hover:text-primary transition-all group text-left"
               >
                 Name
-                <ArrowUpDown className="ml-2 h-3 w-3" />
+                <ArrowUpDown className="ml-2 h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
               </button>
-              <div className="text-center">Perks</div>
+              <div className="text-center text-muted-foreground">Perks</div>
               <button
                 onClick={() => handleSort('rarity')}
-                className="flex items-center justify-center hover:text-primary transition-colors"
+                className="flex items-center justify-center hover:text-primary transition-all group"
               >
                 Rarity
-                <ArrowUpDown className="ml-2 h-3 w-3" />
+                <ArrowUpDown className="ml-2 h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
               </button>
               <button
                 onClick={() => handleSort('tier')}
-                className="flex items-center justify-center hover:text-primary transition-colors"
+                className="flex items-center justify-center hover:text-primary transition-all group"
               >
                 Tier
-                <ArrowUpDown className="ml-2 h-3 w-3" />
+                <ArrowUpDown className="ml-2 h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
               </button>
-              <div className="text-center">Gear Score</div>
+              <div className="text-center text-muted-foreground">Gear Score</div>
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-border/30 bg-gradient-to-b from-card/30 to-card/50">
               {loading ? (
                 Array.from({ length: 10 }).map((_, i) => (
-                  <div key={i} className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-4 py-3 items-center">
-                    <Skeleton className="w-12 h-12" />
+                  <div key={i} className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-6 py-4 items-center">
+                    <Skeleton className="w-12 h-12 rounded-lg" />
                     <Skeleton className="h-5 w-48" />
                     <Skeleton className="h-5 w-32" />
                     <Skeleton className="h-5 w-20 mx-auto" />
@@ -348,8 +373,9 @@ const Database = () => {
                   </div>
                 ))
               ) : paginatedItems.length === 0 ? (
-                <div className="px-4 py-12 text-center text-muted-foreground">
-                  No items found
+                <div className="px-6 py-16 text-center">
+                  <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+                  <p className="text-muted-foreground">No items found</p>
                 </div>
               ) : (
                 paginatedItems.map((item) => {
@@ -361,16 +387,16 @@ const Database = () => {
                   return (
                     <div
                       key={item.id}
-                      className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-4 py-3 items-center hover:bg-accent/50 transition-colors cursor-pointer"
+                      className="grid grid-cols-[auto_1fr_200px_120px_100px_120px] gap-4 px-6 py-4 items-center hover:bg-gradient-to-r hover:from-accent/40 hover:to-accent/20 transition-all cursor-pointer group border-l-2 border-transparent hover:border-primary/50"
                       onClick={() => navigate(`/item/${item.id}`)}
                     >
                       {/* Icon */}
-                      <div className="w-12 h-12 bg-background border border-border rounded flex items-center justify-center p-1">
+                      <div className="relative w-12 h-12 bg-gradient-to-br from-secondary to-secondary/50 border border-border/50 rounded-lg flex items-center justify-center p-1 shadow-sm group-hover:border-primary/30 group-hover:shadow-md group-hover:shadow-primary/10 transition-all">
                         {item.icon || item.iconHiRes ? (
                           <img
                             src={getImageUrl(item)}
                             alt={item.name}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain drop-shadow-sm"
                           />
                         ) : (
                           <Package className="w-6 h-6 text-muted-foreground" />
@@ -379,18 +405,18 @@ const Database = () => {
 
                       {/* Name */}
                       <div className="flex items-center gap-2">
-                        <span className={cn('font-medium', rarityColor)}>
+                        <span className={cn('font-semibold text-base group-hover:translate-x-1 transition-transform', rarityColor)}>
                           {item.name}
                         </span>
                       </div>
 
                       {/* Perks */}
-                      <div className="flex items-center gap-2 justify-center">
+                      <div className="flex items-center gap-1.5 justify-center">
                         {item.perks && item.perks.length > 0 ? (
                           item.perks.slice(0, 4).map((perk, idx) => (
                             <div
                               key={`${perk.id}-${idx}`}
-                              className="w-8 h-8 bg-background border border-border rounded flex items-center justify-center"
+                              className="relative w-9 h-9 bg-gradient-to-br from-background to-secondary/30 border border-border/50 rounded-md flex items-center justify-center hover:border-primary/40 hover:scale-110 transition-all shadow-sm"
                               title={perk.name}
                             >
                               {perk.icon ? (
@@ -400,27 +426,27 @@ const Database = () => {
                                   className="w-full h-full object-contain p-0.5"
                                 />
                               ) : (
-                                <Wand2 className="w-4 h-4 text-muted-foreground" />
+                                <Wand2 className="w-4 h-4 text-primary/70" />
                               )}
                             </div>
                           ))
                         ) : (
-                          <span className="text-muted-foreground text-sm">-</span>
+                          <span className="text-muted-foreground/50 text-sm">-</span>
                         )}
                       </div>
 
                       {/* Rarity */}
-                      <div className={cn('text-center font-medium', rarityColor)}>
+                      <div className={cn('text-center font-semibold text-sm', rarityColor)}>
                         {rarityDisplay}
                       </div>
 
                       {/* Tier */}
-                      <div className="text-center font-medium">
+                      <div className="text-center font-bold text-primary/90">
                         {tierDisplay}
                       </div>
 
                       {/* Gear Score */}
-                      <div className="text-center text-muted-foreground">
+                      <div className="text-center text-muted-foreground font-medium">
                         {gearScore}
                       </div>
                     </div>
@@ -432,12 +458,13 @@ const Database = () => {
 
           {/* Pagination */}
           {!loading && filteredItems.length > 0 && (
-            <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="flex items-center justify-center gap-2 mt-8">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}
+                className="hover:border-primary/50 transition-all disabled:opacity-30"
               >
                 <ChevronsLeft className="h-4 w-4" />
               </Button>
@@ -446,11 +473,12 @@ const Database = () => {
                 size="sm"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
+                className="hover:border-primary/50 transition-all disabled:opacity-30"
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
                   if (totalPages <= 5) {
@@ -469,7 +497,12 @@ const Database = () => {
                       variant={currentPage === pageNum ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setCurrentPage(pageNum)}
-                      className="w-9"
+                      className={cn(
+                        "w-10 h-10 transition-all",
+                        currentPage === pageNum 
+                          ? "bg-gradient-to-r from-primary to-gold-secondary shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30" 
+                          : "hover:border-primary/50 hover:text-primary"
+                      )}
                     >
                       {pageNum}
                     </Button>
@@ -482,6 +515,7 @@ const Database = () => {
                 size="sm"
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
+                className="hover:border-primary/50 transition-all disabled:opacity-30"
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
@@ -490,6 +524,7 @@ const Database = () => {
                 size="sm"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}
+                className="hover:border-primary/50 transition-all disabled:opacity-30"
               >
                 <ChevronsRight className="h-4 w-4" />
               </Button>
