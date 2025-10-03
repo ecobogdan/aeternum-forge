@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* New World: Aeternum Design System - Mystical dark theme with gold accents */
+
+@layer base {
+  :root {
+    /* Dark mystical background with subtle blue undertones */
+    --background: 215 25% 8%;
+    --foreground: 45 100% 95%;
+
+    /* Card surfaces with subtle elevation */
+    --card: 215 20% 12%;
+    --card-foreground: 45 100% 95%;
+
+    /* Popover and dropdown surfaces */
+    --popover: 215 20% 12%;
+    --popover-foreground: 45 100% 95%;
+
+    /* Golden primary color inspired by Aeternum */
+    --primary: 45 90% 55%;
+    --primary-foreground: 215 25% 8%;
+
+    /* Muted blue-gray secondary */
+    --secondary: 215 15% 18%;
+    --secondary-foreground: 45 100% 95%;
+
+    /* Subtle muted areas */
+    --muted: 215 15% 15%;
+    --muted-foreground: 45 20% 70%;
+
+    /* Accent with mystical blue-purple */
+    --accent: 240 50% 25%;
+    --accent-foreground: 45 100% 95%;
+
+    /* Destructive red for warnings */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 45 100% 95%;
+
+    /* Borders and inputs with subtle glow effect */
+    --border: 215 15% 20%;
+    --input: 215 15% 18%;
+    --ring: 45 90% 55%;
+
+    /* Custom design tokens for New World theme */
+    --gold-primary: 45 90% 55%;
+    --gold-secondary: 45 70% 45%;
+    --aeternum-blue: 200 80% 45%;
+    --corruption-purple: 280 60% 40%;
+    --nature-green: 120 50% 40%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(215 25% 8%), hsl(215 20% 12%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 90% 55%), hsl(45 70% 45%));
+    --gradient-mystical: linear-gradient(135deg, hsl(240 50% 25%), hsl(280 60% 40%));
+    
+    /* Shadows with golden glow */
+    --shadow-glow: 0 0 20px hsl(45 90% 55% / 0.3);
+    --shadow-subtle: 0 4px 20px hsl(215 25% 4% / 0.4);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Light theme variation (subtle adjustments) */
+  .light {
+    --background: 45 100% 97%;
+    --foreground: 215 25% 15%;
+    --card: 45 50% 95%;
+    --card-foreground: 215 25% 15%;
+    --popover: 45 50% 95%;
+    --popover-foreground: 215 25% 15%;
+    --primary: 45 90% 45%;
+    --primary-foreground: 45 100% 97%;
+    --secondary: 215 10% 85%;
+    --secondary-foreground: 215 25% 15%;
+    --muted: 215 10% 90%;
+    --muted-foreground: 215 15% 45%;
+    --accent: 240 50% 65%;
+    --accent-foreground: 45 100% 97%;
+    --border: 215 15% 80%;
+    --input: 215 15% 85%;
+    --ring: 45 90% 45%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--gold-secondary));
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .hero-text {
+    @apply text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-gold-secondary bg-clip-text text-transparent;
+  }
+
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .mystical-border {
+    border-image: var(--gradient-mystical) 1;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)), 0 0 15px hsl(var(--primary)); }
+    to { box-shadow: 0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary)), 0 0 30px hsl(var(--primary)); }
+  }
+
+  /* Microsoft Edge compatibility fixes */
+  .edge-grid-fallback {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr;
+    -ms-grid-rows: auto;
+  }
+
+  @media (min-width: 640px) {
+    .edge-grid-fallback {
+      -ms-grid-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .edge-grid-fallback {
+      -ms-grid-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .edge-grid-fallback {
+      -ms-grid-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .edge-grid-fallback {
+      -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  /* Ensure cards have consistent sizing in Edge */
+  .card-responsive {
+    min-height: 140px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Fix flexbox issues in Edge */
+  .edge-flex-fix {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  @media (min-width: 640px) {
+    .edge-flex-fix {
+      -ms-flex-direction: row;
+      flex-direction: row;
+    }
+  }
+}
