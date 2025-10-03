@@ -205,81 +205,6 @@ const rarityTextColors: Record<number, string> = {
   4: 'text-amber-300',
   5: 'text-fuchsia-300',
   100: 'text-rose-300',
-=======
-const categories = [
-  { 
-    id: 'items', 
-    name: 'Items', 
-    icon: Swords, 
-    enabled: true,
-    endpoint: 'items',
-    description: 'Weapons, armor, and equipment'
-  },
-  { 
-    id: 'mounts', 
-    name: 'Mounts', 
-    icon: Star, 
-    enabled: true,
-    endpoint: 'mounts',
-    description: 'Horses, wolves, sabretooths and bears'
-  },
-  { 
-    id: 'recipes', 
-    name: 'Recipes', 
-    icon: Gem, 
-    enabled: true,
-    endpoint: 'recipes',
-    description: 'Crafting recipes and schematics'
-  },
-  { 
-    id: 'abilities', 
-    name: 'Abilities', 
-    icon: Zap, 
-    enabled: true,
-    endpoint: 'abilities',
-    description: 'Weapon skills and abilities'
-  },
-  { 
-    id: 'perks', 
-    name: 'Perks', 
-    icon: Target, 
-    enabled: true,
-    endpoint: 'perks',
-    description: 'Item perks and enhancements'
-  },
-  { 
-    id: 'consumables', 
-    name: 'Consumables', 
-    icon: Beaker, 
-    enabled: true,
-    endpoint: 'consumables',
-    description: 'Potions, food, and consumable items'
-  },
-];
-
-const rarityColors = {
-  'Common': 'from-gray-400 to-gray-500',
-  'Uncommon': 'from-green-400 to-green-500',
-  'Rare': 'from-blue-400 to-blue-500',
-  'Epic': 'from-purple-400 to-purple-500',
-  'Legendary': 'from-orange-400 to-orange-500',
-  'Artifact': 'from-red-400 to-red-500',
-  0: 'from-gray-400 to-gray-500',
-  1: 'from-green-400 to-green-500',
-  2: 'from-blue-400 to-blue-500',
-  3: 'from-purple-400 to-purple-500',
-  4: 'from-orange-400 to-orange-500',
-  100: 'from-red-400 to-red-500',
-};
-
-const rarityNames = {
-  0: 'Common',
-  1: 'Uncommon', 
-  2: 'Rare',
-  3: 'Epic',
-  4: 'Legendary',
-  100: 'Artifact'
->>>>>>> 037983faadfcc98299e2af7549d0913ba9fd3185
 };
 
 const rarityNameToNumeric: Record<string, number> = {
@@ -1338,7 +1263,6 @@ const Database = () => {
   const [isLoadingCategory, setIsLoadingCategory] = useState(false);
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [hoverLoading, setHoverLoading] = useState(false);
-<<<<<<< HEAD
   const [hoveredItem, setHoveredItem] = useState<Item | null>(null);
   const [hoveredPerk, setHoveredPerk] = useState<Perk | null>(null);
   const [activeHoverKey, setActiveHoverKey] = useState<string | null>(null);
