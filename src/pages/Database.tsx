@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-<<<<<<< HEAD
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Separator } from '@/components/ui/separator';
@@ -22,22 +21,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Sparkles,
-=======
-import { Skeleton } from '@/components/ui/skeleton';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { 
-  Search, 
-  ChevronDown, 
-  ChevronLeft, 
-  ChevronRight,
-  Star,
-  Shield,
->>>>>>> 037983faadfcc98299e2af7549d0913ba9fd3185
   Swords,
   ScrollText,
   Zap,
   Target,
-<<<<<<< HEAD
   BookOpen,
   Shield,
   Compass,
@@ -50,16 +37,6 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-=======
-  Gem,
-  Book,
-  Beaker,
-  Mountain,
-  Users,
-  MapPin,
-  Trophy,
-  Gamepad2
->>>>>>> 037983faadfcc98299e2af7549d0913ba9fd3185
 } from 'lucide-react';
 import { Map as MapIcon } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -107,7 +84,6 @@ interface Item {
   }>;
 }
 
-<<<<<<< HEAD
 interface Perk {
   id: string;
   name: string;
@@ -139,20 +115,6 @@ interface SearchResult {
   rarity?: number | string;
   tier?: number;
   gearScoreMax?: number;
-=======
-interface SearchResult {
-  id: string;
-  name: string;
-  rarity: string;
-  tier: number;
-  icon: string;
-  iconHiRes?: string;
-  gearScoreMax?: number;
-  mountType?: string;
-  type?: string;
-  tradeskill?: string;
-  category?: string;
->>>>>>> 037983faadfcc98299e2af7549d0913ba9fd3185
 }
 
 interface CategoryData {
@@ -162,7 +124,6 @@ interface CategoryData {
   dynamicFilters?: Record<string, unknown>;
 }
 
-<<<<<<< HEAD
 type FilterType = 'single' | 'multi';
 
 interface FilterOption {
