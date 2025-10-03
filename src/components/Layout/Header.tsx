@@ -16,6 +16,9 @@ const Header = () => {
   const navigation = [
     { name: "Home", href: "/" },
     { name: "S9 Builds", href: "/builds" },
+    { name: "Database", href: "/new-world-database" },
+    { name: "Resource Map", href: "/resource-map" },
+    { name: "Skill Builder", href: "/skill-builder" },
     {
       name: "Guides",
       dropdown: [
