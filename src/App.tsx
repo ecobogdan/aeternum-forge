@@ -22,7 +22,6 @@ import HiveOfGorgonGuide from "./pages/guides/HiveOfGorgonGuide";
 import UltimateGoldMakingGuide from "./pages/guides/UltimateGoldMakingGuide";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ResourceMap from "./pages/ResourceMap";
-import SkillBuilder from "./pages/SkillBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

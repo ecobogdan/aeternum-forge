@@ -88,6 +88,48 @@ export class SimpleNWDBService {
     return 0;
   }
 
+  public async getItems(options?: {
+    limit?: number;
+    itemType?: string;
+  }): Promise<any> {
+    try {
+      const response = await this.fetchWithTimeout("https://nwdb.info/db/search/[[all]]");
+      if (!response.ok) {
+        console.error("Items API error:", response.status, response.statusText);
+        return { data: [] };
+      }
+
+      const payload = await response.json();
+      const allItems = payload.data || payload;
+
+      // Filter to only items (not perks)
+      let items = allItems.filter((item: any) => {
+        if (item.type !== "item") return false;
+        if (!item.name || !item.id) return false;
+        if (typeof item.id === "string" && item.id.startsWith("perkid_")) return false;
+        return true;
+      });
+
+      // Filter by itemType if provided
+      if (options?.itemType && options.itemType !== 'all') {
+        items = items.filter((item: any) => {
+          const itemType = (item.itemType || item.type || '').toLowerCase();
+          return itemType.includes(options.itemType!.toLowerCase());
+        });
+      }
+
+      // Apply limit
+      if (options?.limit) {
+        items = items.slice(0, options.limit);
+      }
+
+      return { data: items };
+    } catch (error) {
+      console.error("Error fetching items:", error);
+      return { data: [] };
+    }
+  }
+
   public async searchItems(
     query: string,
     limit: number = 25,
