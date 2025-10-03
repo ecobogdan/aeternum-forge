@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, ExternalLink, Shield, Swords, Heart, Zap, Target, Gem, Lock, Book, Star, MapPin, Hammer, Sword, Pickaxe, Fish, TreePine, Wheat, Skull, Trophy, Gift, ShoppingCart, Crown, Award, Tag } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Shield, Swords, Heart, Zap, Target, Gem, Lock, Book, Star, MapPin, Hammer, Sword, Pickaxe, Fish, TreePine, Wheat, Skull, Trophy, Gift, ShoppingCart, Crown, Award, Tag, Sparkles } from 'lucide-react';
 import { siteUrl } from '@/config/seo';
 import { itemDataService, EnhancedItem, AcquisitionData, AttributesData } from '@/services/itemDataService';
 import { simpleNwdbService } from '@/services/simpleNwdbService';
@@ -41,6 +41,14 @@ const rarityTextColors = {
   2: 'text-blue-400', // Rare
   1: 'text-green-400', // Uncommon
   0: 'text-gray-300', // Common
+};
+
+const formatChance = (value?: number | null): string => {
+  if (value === undefined || value === null || Number.isNaN(value)) return '--';
+  const normalized = value <= 1 ? value * 100 : value;
+  const clamped = Math.min(100, Math.max(0, normalized));
+  const rounded = Math.round(clamped * 10) / 10;
+  return `${rounded}%`;
 };
 
 const ItemDetail = () => {
@@ -328,7 +336,7 @@ const ItemDetail = () => {
               <Skeleton className="h-4 w-32" />
             </div>
             <div className="max-w-4xl mx-auto">
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur">
                 <CardContent className="p-8">
                   <div className="flex items-center space-x-6">
                     <Skeleton className="w-24 h-24 rounded-lg" />
@@ -357,7 +365,7 @@ const ItemDetail = () => {
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
           <div className="container mx-auto px-4 py-8">
             <div className="max-w-4xl mx-auto text-center">
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur">
                 <CardContent className="p-8">
                   <h1 className="text-2xl font-bold text-white mb-4">Item Not Found</h1>
                   <p className="text-gray-400 mb-6">The requested item could not be found.</p>
@@ -396,7 +404,7 @@ const ItemDetail = () => {
 
           {/* Item Details */}
           <div className="max-w-4xl mx-auto">
-            <Card className={`bg-slate-800/50 border-slate-700 ${getRarityOutlineClasses(item.rarity)}`}>
+            <Card className={`rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur ${getRarityOutlineClasses(item.rarity)}`}>
               <CardHeader className="pb-4">
                 <div className="flex items-start space-x-6">
                   <div className="relative">
@@ -426,17 +434,11 @@ const ItemDetail = () => {
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8 pt-6">
                 {/* Flavor Text */}
-                {item.description && (
-                  <div className="border-t border-slate-600 pt-4">
-                    <p className="text-orange-400 italic text-sm">{item.description}</p>
-                  </div>
-                )}
-
                 {/* Artifact Objectives */}
                 {artifactObjectives.length > 0 && (
-                  <div>
+                  <div className="rounded-lg border border-slate-700/60 bg-slate-900/60 p-5 shadow-inner">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
                       <Trophy className="h-5 w-5 text-yellow-400" />
                       <span>Artifact Objectives</span>
@@ -454,7 +456,7 @@ const ItemDetail = () => {
 
                 {/* Attributes Section */}
                 {item.attributes && (
-                  <div>
+                  <div className="rounded-lg border border-slate-700/60 bg-slate-900/60 p-5 shadow-inner">
                     <h3 className="text-lg font-semibold text-white mb-4">Attributes</h3>
                     {renderAttributesData(item.attributes)}
                   </div>
@@ -462,7 +464,7 @@ const ItemDetail = () => {
 
                 {/* Perks Section */}
                 {item.perks && item.perks.length > 0 && (
-                  <div>
+                  <div className="rounded-lg border border-slate-700/60 bg-slate-900/60 p-5 shadow-inner">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
                       <Gem className="h-5 w-5 text-purple-400" />
                       <span>Perks</span>
@@ -500,7 +502,7 @@ const ItemDetail = () => {
 
                 {/* Acquisition Data */}
                 {item.acquisition && (
-                  <div>
+                  <div className="rounded-lg border border-slate-700/60 bg-slate-900/60 p-5 shadow-inner">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
                       <MapPin className="h-5 w-5 text-green-400" />
                       <span>Acquisition</span>
@@ -513,7 +515,7 @@ const ItemDetail = () => {
 
                 {/* Item Classes */}
                 {item.classes && item.classes.length > 0 && (
-                  <div>
+                  <div className="rounded-lg border border-slate-700/60 bg-slate-900/60 p-5 shadow-inner">
                     <h3 className="text-lg font-semibold text-white mb-4 flex items-center space-x-2">
                       <Tag className="h-5 w-5 text-blue-400" />
                       <span>Item Classes</span>

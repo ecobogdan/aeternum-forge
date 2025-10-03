@@ -3,7 +3,7 @@ export const siteUrl = rawSiteUrl.replace(/\/$/, '');
 
 export const sitemapRoutes = [
   { path: '/', priority: 1.0, changeFreq: 'weekly' },
-  { path: '/builds', priority: 0.9, changeFreq: 'weekly' },
+  { path: '/new-world-builds', priority: 0.9, changeFreq: 'weekly' },
   { path: '/guides/new-player-guide', priority: 0.9, changeFreq: 'monthly' },
   { path: '/guides/pvp-guide', priority: 0.9, changeFreq: 'monthly' },
   { path: '/guides/opr-healing-guide', priority: 0.8, changeFreq: 'monthly' },

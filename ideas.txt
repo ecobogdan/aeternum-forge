@@ -1,0 +1,157 @@
+
+🔝 Best UX Improvements for NW-Builds
+
+1. Homepage First Impression
+Current: Oversized hero with little actionable content.
+Fix: Redesign above-the-fold:
+Clear value proposition (“Find the best New World builds & tools in seconds”).
+Direct CTAs: Search bar, Top Builds, Skill Builder.
+Visual build cards instead of plain text links.
+Why: First 5 seconds decide if a user stays or bounces. Right now, too much scrolling is needed.
+
+2. Navigation Simplification
+Current: Builds page has both side nav + filter bar → redundant.
+Fix: Consolidate into one navigation method. Keep filter chips (mobile-friendly) and drop/demote side nav.
+Why: Cognitive load decreases. One clear way to browse improves task completion.
+
+3. Build Cards & Visual Hierarchy
+Current: Builds often appear as text lists.
+Fix: Use visual cards with:
+Weapon icons, role tags (PvP, PvE, Tank, Healer).
+“Updated for Patch X.X” freshness tag.
+Why: Improves scannability, trust, and encourages clicks.
+
+4. Skill Builder Usability
+Current: Reset button + point counter float awkwardly.
+Fix: Add a sticky bottom bar with key actions (points spent, reset, export, save).
+Why: Familiar pattern in gaming tools, reduces confusion, boosts engagement.
+
+5. Information Architecture
+Current: Homepage buries builds, guides, and tools equally far down.
+Fix: Reorganize content into three clear pillars:
+Builds (default CTA for new visitors).
+Guides (supporting content).
+Tools (interactive calculators).
+Why: Clarifies the site’s structure and reduces hunting.
+
+6. Trust & Authority
+Current: Builds lack timestamps, author presence.
+Fix: Add last updated date, patch version, and author credit.
+Why: Gaming metas change fast; freshness = credibility. This reduces bounce.
+
+7. Personalization & Retention
+Current: Every visit feels the same.
+Fix: Add recently viewed builds and favorites (stored locally, no login needed).
+Why: Keeps people returning and reduces friction when revisiting.
+
+8. Community & Social Proof
+Current: Feels like a solo utility site
+Fix: Add “Most popular builds this week” or basic voting/like system.
+Why: Social proof builds trust, keeps content dynamic.
+
+9. Performance & Mobile Optimization
+Current: Vite + React stack is good, but bundle is heavy (~53 deps).
+Fix: Audit bundle size, lazy-load routes, prioritize mobile layout (especially builder).
+Why: Gamers often browse builds on mobile while playing. Performance directly impacts conversion.
+
+10. Conversion Layer (Soft + Twitch)
+Current: Twitch presence is absent.
+Fix: Add non-intrusive Twitch CTAs:
+In homepage hero (“Live on Twitch”).
+At end of builds/guides (“See this in action on Twitch”).
+Small persistent “Live Now” badge.
+Why: Integrates Twitch as part of the experience without overwhelming the rest.
+
+🎯 Priority Roadmap
+
+Homepage redesign (value prop + builds upfront).
+Simplify navigation (one clear filter).
+Improve build presentation (cards + freshness tags).
+Fix skill builder UX (sticky bar).
+Layer trust signals (updates, authorship).
+Add light personalization (favorites/recently viewed).
+Introduce community/social proof.
+Optimize mobile & performance.
+Then: Layer soft Twitch CTAs naturally.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Hero Section = “Live Hook”
+Current issue: The hero is large but static, not driving any action.
+Change: Replace with a Twitch-focused hero:
+Embed “Live Now on Twitch” widget if you’re streaming.
+If offline, show next scheduled stream or best highlight clip.
+Add a Watch on Twitch CTA button (large, above the fold).
+Reason: Every visitor sees this first. Right now, it’s wasted space. Make Twitch the centerpiece.
+
+
+2. Build Pages → Soft Funnel to Twitch
+Current issue: Build pages deliver value, but no connection to you.
+Change: Add a small Twitch banner or CTA inside each build:
+“Want to see this build in action? Watch live on Twitch.”
+Could be a sticky sidebar block or a CTA at the end of each build.
+Reason: Users consuming builds are highly qualified leads for your Twitch — they’re interested in gameplay, not just theory.
+
+
+3. Persistent Twitch CTA (Non-Intrusive)
+Current issue: No constant Twitch presence.
+Change: Add a floating Twitch bar/badge (bottom-right corner):
+Shows Live indicator when you’re live.
+Expands on hover to “Watch Now.”
+Reason: Constant reminder without breaking UX flow. Users can ignore if they want, but it’s always there.
+
+
+4. Homepage Content Blocks → Stream-Focused
+Current issue: Homepage hides value below fold.
+Change:
+Add a “From My Stream” section → short clips of you testing builds, boss fights, PvP duels.
+Add “This week on Twitch” → highlight reel or schedule.
+Reason: Creates curiosity and humanizes the site. Visitors don’t just see tools; they see you as the expert.
+
+
+5. Social Proof & Trust
+Current issue: Feels like a standalone tool, no authority reinforcement.
+Change:
+Add Twitch follower count / live viewer count if strong.
+Testimonials or “Featured on Reddit / Discord” tags if applicable.
+Reason: Social proof pushes users from passive browsing → active following.
+
+
+
+
+
+
+
+Build Finder (like a wizard to help people find a build for what they are looking for, still no idea how this should look like)
+
+Personalization: like having "recently viewed builds" or something, to get rid of monotony
+
+long term, some voting system for builds (that I was about to talk to LLANGI first)
+
+Give some context about LLANGI, because usually in build websites, credibility is the key, so having some data about llangi and his 10k hours in game, might help building trust?
+  
+Reorganize the home page into more priotity into the 3 main things inside website: Reorganize into 3 pillars: Builds → Guides → Tools
+
+I was thinking to get the overwall website more New World vibe, probably using tied fonts, iconograph, etc...

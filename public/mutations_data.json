@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "data": [
+    {
+      "expedition": "Barnacles and Black Powder",
+      "mutationType": "Barneys, Ennead, and Forge; Eternal, Savage, Desiccated",
+      "date": "Current Week",
+      "difficulty": "Unknown",
+      "weaknesses": [
+        "30% Nature",
+        "15% Ice",
+        "10% Strike"
+      ],
+      "artifact": "Void Darkplate Heavy Chestwear",
+      "lastUpdated": "2024-12-29T18:45:00.000Z"
+    },
+    {
+      "expedition": "Empyrean Forge",
+      "mutationType": "Barneys, Ennead, and Forge; Eternal, Savage, Desiccated",
+      "date": "Current Week",
+      "difficulty": "Unknown",
+      "weaknesses": [
+        "30% Arcane",
+        "20% Ice"
+      ],
+      "artifact": "Inferno Fire Staff",
+      "lastUpdated": "2024-12-29T18:45:00.000Z"
+    },
+    {
+      "expedition": "The Ennead",
+      "mutationType": "Barneys, Ennead, and Forge; Eternal, Savage, Desiccated",
+      "date": "Current Week",
+      "difficulty": "Unknown",
+      "weaknesses": [
+        "30% Strike",
+        "20% Ice"
+      ],
+      "artifact": "Unknown Artifact",
+      "lastUpdated": "2024-12-29T18:45:00.000Z"
+    }
+  ],
+  "count": 3,
+  "lastFetched": "2024-12-29T18:45:00.000Z",
+  "source": "newworldnews.org HTML scraping"
+}

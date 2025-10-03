@@ -188,6 +188,20 @@ const Layout = ({ children, title, description, canonical, image, type, noIndex,
                   </NavigationMenuLink>
                 </NavigationMenuItem>
 
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild>
+                    <Link 
+                      to="/tools/new-world-skill-builder" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50",
+                        isActive("/tools/new-world-skill-builder") && "bg-accent text-accent-foreground"
+                      )}
+                    >
+                      Skill Builder
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+
                 <div ref={toolsRef} className="relative">
                   <button
                     type="button"
@@ -300,6 +314,14 @@ const Layout = ({ children, title, description, canonical, image, type, noIndex,
                   Armor Calculator
                 </Link>
 
+                <Link 
+                  to="/tools/new-world-skill-builder" 
+                  className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Skill Builder
+                </Link>
+
                 {/* Tools submenu */}
                 <div className="space-y-1">
                   <div className="px-3 py-2 text-sm font-medium text-muted-foreground">Gold Making Tools</div>
@@ -359,6 +381,7 @@ const Layout = ({ children, title, description, canonical, image, type, noIndex,
                   <Link to="/new-world-builds" className="block hover:text-primary">S9 Builds</Link>
                   <Link to="/guides/new-world-new-player-guide" className="block hover:text-primary">New Player Guide</Link>
                   <Link to="/tools/new-world-armor-weight-calculator" className="block hover:text-primary">Armor Calculator</Link>
+                  <Link to="/tools/new-world-skill-builder" className="block hover:text-primary">Skill Builder</Link>
                 </div>
               </div>
               <div>
@@ -383,19 +406,29 @@ const Layout = ({ children, title, description, canonical, image, type, noIndex,
               </div>
             </div>
             <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-  <p>
-    &copy; 2025 NW-Builds by LLangi. Built for the New World community.  
-    Shoutout to{" "}
-    <a
-      href="https://www.nw-buddy.de/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="underline hover:text-foreground"
-    >
-      NW-Buddy
-    </a>
-    .
-  </p>
+            <p>
+  &copy; 2025 NW-Builds by LLangi. Built for the New World community.  
+  Shoutout to{" "}
+  <a
+    href="https://www.nw-buddy.de/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:text-foreground"
+  >
+    NW-Buddy
+  </a>{" "}
+  and{" "}
+  <a
+    href="https://nwdb.info/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:text-foreground"
+  >
+    NWDB.info
+  </a>
+  .
+</p>
+
 </div>
           </div>
         </footer>

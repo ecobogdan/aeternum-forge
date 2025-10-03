@@ -234,7 +234,7 @@ const BuildsSidebar: React.FC<BuildsSidebarProps> = ({
         {/* Mobile sidebar */}
         <div
           className={cn(
-            "fixed left-0 top-0 z-50 h-full w-72 bg-background border-r transform transition-transform duration-300 ease-in-out lg:hidden",
+            "fixed left-0 top-0 z-50 h-full w-64 bg-background border-r transform transition-transform duration-300 ease-in-out lg:hidden",
             isOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -372,7 +372,7 @@ const BuildsSidebar: React.FC<BuildsSidebarProps> = ({
   return (
     <div
       className={cn(
-        "w-72 transition-all duration-300 ease-in-out",
+        "w-56 transition-all duration-300 ease-in-out",
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >

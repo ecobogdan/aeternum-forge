@@ -156,7 +156,7 @@ export default function PerkDetail() {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <Skeleton className="h-8 w-48 mb-6" />
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur">
               <CardContent className="p-8">
                 <div className="flex items-center space-x-6">
                   <Skeleton className="w-24 h-24 rounded-lg" />
@@ -188,7 +188,7 @@ export default function PerkDetail() {
                 <span>Back to Database</span>
               </Link>
             </div>
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur">
               <CardContent className="p-8 text-center">
                 <h1 className="text-2xl font-bold text-white mb-4">Perk Not Found</h1>
                 <p className="text-slate-400 mb-6">
@@ -224,8 +224,8 @@ export default function PerkDetail() {
           </div>
 
           {/* Perk Details */}
-          <Card className="bg-slate-800/50 border-slate-700">
-            <CardContent className="p-4">
+          <Card className="rounded-2xl border border-slate-700/60 bg-slate-900/70 backdrop-blur">
+            <CardContent className="space-y-6 p-6">
               <div className="flex items-start space-x-3">
                 {/* Perk Icon */}
                 <div className="relative">
@@ -265,7 +265,7 @@ export default function PerkDetail() {
                 </div>
               </div>
 
-              <Separator className="my-3 bg-slate-700" />
+              <div className="my-4 border-b border-slate-700/60" />
 
               {/* Description */}
               <div className="space-y-2">
@@ -282,7 +282,7 @@ export default function PerkDetail() {
               {/* Condition */}
               {perk.condition && (
                 <>
-                  <Separator className="my-2 bg-slate-700" />
+                  <div className="my-4 border-b border-slate-700/60" />
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-slate-400">Condition:</span>
@@ -295,7 +295,7 @@ export default function PerkDetail() {
               {/* Compatible With */}
               {perk.perkItemClassInclude && Array.isArray(perk.perkItemClassInclude) && perk.perkItemClassInclude.length > 0 && (
                 <>
-                  <Separator className="my-2 bg-slate-700" />
+                  <div className="my-4 border-b border-slate-700/60" />
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-slate-400">Compatible With:</span>
@@ -310,7 +310,7 @@ export default function PerkDetail() {
               {/* Exclusive Labels */}
               {perk.ExclusiveLabels && Array.isArray(perk.ExclusiveLabels) && perk.ExclusiveLabels.length > 0 && (
                 <>
-                  <Separator className="my-2 bg-slate-700" />
+                  <div className="my-4 border-b border-slate-700/60" />
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-slate-400">Exclusive Labels:</span>
@@ -329,7 +329,7 @@ export default function PerkDetail() {
               {/* Craft Mod */}
               {perk.craftMod && (
                 <>
-                  <Separator className="my-2 bg-slate-700" />
+                  <div className="my-4 border-b border-slate-700/60" />
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-slate-400">Craft Mod:</span>

@@ -270,10 +270,10 @@ const NewPlayerGuide = () => {
       </AccordionContent>
     </AccordionItem>
 
-    {/* 2. Healers (kept exactly as in your file) */}
-    <AccordionItem value="healers" className="border-muted/40">
+    {/* 2. Ranger (kept exactly as in your file) */}
+    <AccordionItem value="ranger" className="border-muted/40">
       <AccordionTrigger className="text-left">
-        <span className="font-medium text-nature-green">2. Healers</span>
+        <span className="font-medium text-nature-green">2. Ranger</span>
       </AccordionTrigger>
       <AccordionContent>
         <div className="bg-muted/30 p-4 rounded border-l-4 border-nature-green">
@@ -284,7 +284,7 @@ const NewPlayerGuide = () => {
             <li><strong>Trade Skills:</strong> Engineering, Logging, Woodworking</li>
             <li><strong>Playstyle:</strong> Mobile ranged fighter with strong kiting and utility</li>
             <br />
-            <strong>Leveling Tip:</strong> Use Hatchet’s “Berserk” for solo efficiency, and Sword &amp; Shield for group tanking in expeditions.
+            <strong>Leveling Tip:</strong> Use Bow for questing and ranged mobs, then swap to Spear for bosses or tight fights.
           </ul>
         </div>
       </AccordionContent>

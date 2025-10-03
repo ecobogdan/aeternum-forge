@@ -14,6 +14,19 @@ export interface Perk {
   ScalingPerGearScore?: string;
 }
 
+export interface RandomPerkOption {
+  id: string;
+  name?: string;
+  chance?: number;
+  icon?: string;
+}
+
+export interface RandomPerkBucket {
+  id: string;
+  chance?: number;
+  options: RandomPerkOption[];
+}
+
 export interface AcquisitionData {
   craftedAt?: Array<{ id: string; name: string; type?: string; link?: string }>;
   pvpReward?: Array<{ tags: string[]; priceDat: any }>;
@@ -62,6 +75,7 @@ export interface EnhancedItem {
   tier?: number;
   classes: string[];
   perks: Perk[];
+  randomPerkBuckets: RandomPerkBucket[];
   acquisition?: AcquisitionData;
   attributes?: AttributesData;
   iconUrl?: string;
@@ -330,6 +344,53 @@ export class ItemDataService {
       };
     }).filter(Boolean);
 
+    // Process random perk buckets and add to main perks array
+    const randomPerkBuckets: RandomPerkBucket[] = Array.isArray(d.perkBuckets)
+      ? d.perkBuckets
+          .map((bucket: any, bucketIndex: number) => {
+            if (!bucket) return null;
+            const bucketId = bucket.id || `bucket-${bucketIndex}`;
+            const bucketChance = typeof bucket.chance === 'number' ? bucket.chance : undefined;
+            const options = Array.isArray(bucket.perks)
+              ? bucket.perks
+                  .map((option: any, optionIndex: number) => {
+                    if (!option) return null;
+                    const perk = option.perk || option;
+                    const optionId = perk?.id || option?.id || `${bucketId}-option-${optionIndex}`;
+                    const optionName = perk?.name || option?.name || optionId;
+                    const chance = typeof option?.chance === 'number' ? option.chance : undefined;
+                    return {
+                      id: optionId,
+                      name: optionName,
+                      chance,
+                      icon: perk?.icon || option?.icon,
+                    } as RandomPerkOption;
+                  })
+                  .filter((entry: RandomPerkOption | null): entry is RandomPerkOption => entry !== null)
+              : [];
+            if (!options.length) return null;
+            return { id: bucketId, chance: bucketChance, options };
+          })
+          .filter((entry: RandomPerkBucket | null): entry is RandomPerkBucket => entry !== null)
+      : [];
+
+    // Add random perk entries for each perk bucket
+    if (randomPerkBuckets.length > 0) {
+      randomPerkBuckets.forEach((bucket, index) => {
+        const bucketChance = bucket.chance || 0;
+        const randomChancePercent = bucketChance <= 1 ? bucketChance * 100 : bucketChance;
+        const formattedChance = Math.round(randomChancePercent * 10) / 10;
+        
+        perks.push({
+          id: `random-perk-${bucket.id || index}`,
+          name: `${formattedChance}% Random`,
+          description: `Random perk with ${formattedChance}% chance`,
+          link: undefined,
+          ScalingPerGearScore: undefined
+        });
+      });
+    }
+
     const result: EnhancedItem = {
       id: itemId || '',
       name: d.name || '',
@@ -339,6 +400,7 @@ export class ItemDataService {
       tier: d.tier,
       classes: this.strList(d.itemClass),
       perks,
+      randomPerkBuckets: [], // Keep empty to maintain interface compatibility
       iconUrl: this.iconUrlFromIconField(d.icon),
       description: d.description,
       rarity: d.rarity

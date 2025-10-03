@@ -4,15 +4,20 @@ import { siteUrl } from "@/config/seo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calculator, TrendingUp } from "lucide-react";
+import { Calculator, TrendingUp, Sandwich } from "lucide-react";
 
 /**
  * New World "Matrix" calculator
  * ------------------------------------------------------------
- * This replaces the previous free-form matrix table with the
- * specific calculator from the provided HTML. We keep the
- * existing page framing and shadcn card layout while wiring the
- * original inputs + calculations.
+ * Adds per-subrecipe (sub-item) cost breakdown for each Matrix
+ * section, based on the two-part recipe path mapping.
+ *
+ * Update: Azoth Vials pricing
+ * - Each Matrix consumes 15 Azoth Vials total
+ * - Subrecipe A: 5 vials, Subrecipe B: 5 vials, Final craft: 5 vials
+ * - Main recipe table shows the total 15 vials
+ * - Subrecipe breakdown shows 5 vials per subrecipe, plus a final row showing
+ *   the 5-vial "final craft" fee so that subtotals + fee match the main total
  */
 
 type Prices = {
@@ -23,6 +28,7 @@ type Prices = {
   prismatic_leather: number;
   infused_alkahest: number;
   gemstone_dust: number; // Powerful Gemstone Dust
+  azoth_vial: number; // NEW
 };
 
 const defaultPrices: Prices = {
@@ -33,6 +39,7 @@ const defaultPrices: Prices = {
   prismatic_leather: 0,
   infused_alkahest: 0,
   gemstone_dust: 0,
+  azoth_vial: 0,
 };
 
 // Pretty print money with fixed 2 decimals
@@ -47,20 +54,90 @@ function parseVal(v: string) {
   return Number.isFinite(n) ? n : 0;
 }
 
-// Matrix definitions (quantities per matrix)
-// Matches the mapping in the uploaded HTML document.
+// ---------- Subrecipe definitions ----------
+// Each subrecipe is a reusable ingredient bundle.
+const SUBRECIPES = {
+  enchanted_handle: {
+    key: "enchanted_handle",
+    label: "Enchanted Handle (Armoring)",
+    refining: "Armoring",
+    station: "Outfitting",
+    req: {
+      prismatic_ingot: 2,
+      prismatic_plank: 2,
+      prismatic_leather: 2,
+      azoth_vial: 5, // NEW
+      // 250 Azoth, 5 Gypsum Orb (treated as 0)
+    } as Partial<Record<keyof Prices, number>>,
+  },
+  tempered_cast: {
+    key: "tempered_cast",
+    label: "Tempered Cast (Weaponsmithing)",
+    refining: "Weaponsmithing",
+    station: "Forge",
+    req: {
+      prismatic_ingot: 2,
+      prismatic_cloth: 2,
+      prismatic_leather: 2,
+      azoth_vial: 5, // NEW
+    },
+  },
+  honing_acid: {
+    key: "honing_acid",
+    label: "Honing Acid (Arcana)",
+    refining: "Arcana",
+    station: "Arcane Repository",
+    req: {
+      prismatic_block: 2,
+      prismatic_leather: 2,
+      infused_alkahest: 25,
+      azoth_vial: 5, // NEW
+    },
+  },
+  blessed_rivets: {
+    key: "blessed_rivets",
+    label: "Blessed Rivets (Jewelcrafting)",
+    refining: "Jewelcrafting",
+    station: "Outfitting",
+    req: {
+      prismatic_block: 2,
+      prismatic_ingot: 2,
+      gemstone_dust: 15,
+      azoth_vial: 5, // NEW
+    },
+  },
+  reinforced_bracing: {
+    key: "reinforced_bracing",
+    label: "Reinforced Bracing (Engineering)",
+    refining: "Engineering",
+    station: "Workshop",
+    req: {
+      prismatic_block: 2,
+      prismatic_plank: 2,
+      prismatic_cloth: 2,
+      azoth_vial: 5, // NEW
+    },
+  },
+} as const;
+
+export type SubKey = keyof typeof SUBRECIPES;
+
+// ---------- Matrix definitions (quantities per matrix) ----------
+// Matches the mapping in your notes. Also includes the 2-part path.
 const MATRIXES = [
   {
     key: "weapon_ws",
     title: "Weapon Matrix (Weaponsmithing, Forge)",
     refining: "Weaponsmithing",
     station: "Forge",
+    path: ["enchanted_handle", "tempered_cast"] as SubKey[],
     req: {
       prismatic_ingot: 4,
       prismatic_plank: 2,
       prismatic_leather: 4,
       prismatic_cloth: 2,
-      // Azoth 500, Gypsum Orb 10 (price treated as 0)
+      azoth_vial: 15, // NEW: show total on main recipe
+      // Azoth 750, Gypsum Orb 10 (price treated as 0)
     } as Partial<Record<keyof Prices, number>>,
   },
   {
@@ -68,12 +145,14 @@ const MATRIXES = [
     title: "Weapon Matrix (Engineering, Workshop)",
     refining: "Engineering",
     station: "Workshop",
+    path: ["enchanted_handle", "honing_acid"] as SubKey[],
     req: {
       prismatic_ingot: 2,
       prismatic_plank: 2,
       prismatic_leather: 4,
       prismatic_block: 2,
       infused_alkahest: 25,
+      azoth_vial: 15, // NEW
     },
   },
   {
@@ -81,12 +160,14 @@ const MATRIXES = [
     title: "Armor Matrix (Armoring, Outfitting)",
     refining: "Armoring",
     station: "Outfitting",
+    path: ["blessed_rivets", "reinforced_bracing"] as SubKey[],
     req: {
       prismatic_block: 4,
       prismatic_ingot: 2,
       gemstone_dust: 15,
       prismatic_plank: 2,
       prismatic_cloth: 2,
+      azoth_vial: 15, // NEW
     },
   },
   {
@@ -94,12 +175,14 @@ const MATRIXES = [
     title: "Armor Matrix (Arcana, Arcane Repository)",
     refining: "Arcana",
     station: "Arcane Repository",
+    path: ["tempered_cast", "honing_acid"] as SubKey[],
     req: {
       prismatic_ingot: 2,
       prismatic_cloth: 2,
       prismatic_leather: 4,
       prismatic_block: 2,
       infused_alkahest: 25,
+      azoth_vial: 15, // NEW
     },
   },
   {
@@ -107,19 +190,21 @@ const MATRIXES = [
     title: "Jewelry Matrix (Jewelcrafting, Outfitting)",
     refining: "Jewelcrafting",
     station: "Outfitting",
+    path: ["blessed_rivets", "honing_acid"] as SubKey[],
     req: {
       prismatic_block: 4,
       prismatic_ingot: 2,
       gemstone_dust: 15,
       prismatic_leather: 2,
       infused_alkahest: 25,
+      azoth_vial: 15, // NEW
     },
   },
 ] as const;
 
-type MatrixKey = typeof MATRIXES[number]["key"];
+export type MatrixKey = typeof MATRIXES[number]["key"];
 
-function calcMatrixTotal(prices: Prices, req: Partial<Record<keyof Prices, number>>) {
+function calcTotal(prices: Prices, req: Partial<Record<keyof Prices, number>>) {
   let sum = 0;
   (Object.keys(req) as (keyof Prices)[]).forEach((k) => {
     const qty = req[k] ?? 0;
@@ -137,7 +222,7 @@ export default function MatrixCalculator() {
   };
 
   return (
-        <Layout
+    <Layout
       title="Perk Matrix Calculator - New World Builds"
       description="Filter New World items by slot, weapon, and perk combinations to pinpoint best-in-slot drops for your builds."
       canonical="/tools/new-world-matrix"
@@ -208,26 +293,55 @@ export default function MatrixCalculator() {
                     <Label htmlFor="gemstone_dust">Powerful Gemstone Dust</Label>
                     <Input id="gemstone_dust" inputMode="decimal" placeholder="0.00" onChange={setPrice("gemstone_dust")} />
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="azoth_vial">Azoth Vials</Label>
+                    <Input id="azoth_vial" inputMode="decimal" placeholder="0.00" onChange={setPrice("azoth_vial")} />
+                  </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-4">
-                  Azoth and Gypsum Orb costs are treated as 0 in this calculator.
+                  Azoth and Gypsum Orb (non-vial) costs are treated as 0 in this calculator. Azoth Vials are priced.
                 </p>
               </CardContent>
             </Card>
 
             {/* Results */}
             {MATRIXES.map((m) => {
-              const total = calcMatrixTotal(prices, m.req);
+              const total = calcTotal(prices, m.req);
+
+              // compute subrecipe totals
+              const subTotals = m.path.map((subKey) => {
+                const sub = SUBRECIPES[subKey];
+                return {
+                  key: sub.key,
+                  label: sub.label,
+                  refining: sub.refining,
+                  station: sub.station,
+                  total: calcTotal(prices, sub.req),
+                  req: sub.req,
+                };
+              });
+
+              const pathLabel = `${SUBRECIPES[m.path[0]].label.split(" (")[0]} + ${SUBRECIPES[m.path[1]].label.split(" (")[0]}`;
+
+              // Azoth Vials final craft fee (5)
+              const finalVialsQty = 5;
+              const finalVialsCost = (prices.azoth_vial ?? 0) * finalVialsQty;
+              const sumSubTotals = subTotals.reduce((s, x) => s + x.total, 0);
+              const sumPlusFinal = sumSubTotals + finalVialsCost;
+
               return (
                 <Card key={m.key} className="overflow-hidden">
                   <CardHeader>
                     <CardTitle>{m.title}</CardTitle>
                     <CardDescription>
                       <span className="font-medium">Refining Trait:</span> {m.refining} • <span className="font-medium">Station:</span> {m.station}
+                      <br />
+                      <span className="inline-flex items-center gap-2 text-muted-foreground mt-1"><Sandwich className="h-4 w-4" />Path: {pathLabel}</span>
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                      {/* Overall material table */}
                       <div className="md:col-span-2 overflow-x-auto">
                         <table className="min-w-full text-sm">
                           <thead>
@@ -259,7 +373,65 @@ export default function MatrixCalculator() {
                             </tr>
                           </tfoot>
                         </table>
+
+                        {/* Subrecipe breakdown */}
+                        <div className="mt-6 rounded-lg border">
+                          <div className="px-3 py-2 bg-muted/50 text-sm font-medium">Sub‑recipe breakdown</div>
+                          <div className="grid md:grid-cols-2 gap-0">
+                            {subTotals.map((sub) => (
+                              <div key={sub.key} className="border-t md:border-t-0 md:border-l p-3">
+                                <div className="text-sm font-semibold">{sub.label}</div>
+                                <div className="text-xs text-muted-foreground mb-2">{sub.refining} • {sub.station}</div>
+                                <table className="w-full text-xs">
+                                  <thead>
+                                    <tr className="border-b">
+                                      <th className="text-left py-1 pr-2">Mat</th>
+                                      <th className="text-left py-1 pr-2">Qty</th>
+                                      <th className="text-left py-1 pr-2">Unit</th>
+                                      <th className="text-left py-1">Cost</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {(Object.keys(sub.req) as (keyof Prices)[]).map((k) => {
+                                      const qty = sub.req[k] ?? 0;
+                                      const up = prices[k] ?? 0;
+                                      return (
+                                        <tr key={String(k)} className="border-b last:border-0">
+                                          <td className="py-1 pr-2 capitalize">{String(k).replace(/_/g, " ")}</td>
+                                          <td className="py-1 pr-2">{qty}</td>
+                                          <td className="py-1 pr-2">{fmt(up)}</td>
+                                          <td className="py-1">{fmt(qty * up)}</td>
+                                        </tr>
+                                      );
+                                    })}
+                                  </tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th colSpan={3} className="text-right py-1 pr-2">Subtotal:</th>
+                                      <th className="py-1">{fmt(sub.total)}</th>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="px-3 py-2 text-xs border-t grid md:grid-cols-3 gap-2 items-center">
+                            <div className="md:col-span-2">
+                              Final craft vials: <span className="font-medium">5</span> × <span className="font-medium">{fmt(prices.azoth_vial ?? 0)}</span> = <span className="font-medium">{fmt(finalVialsCost)}</span>
+                            </div>
+                            <div className="text-right md:col-span-1 text-muted-foreground">
+                              Subtotals + final vials: <span className="font-medium">{fmt(sumPlusFinal)}</span>
+                            </div>
+                          </div>
+                          <div className="px-3 pb-2 text-xs text-muted-foreground">
+                            {Math.abs(sumPlusFinal - total) > 0.005 && (
+                              <span className="text-red-600">Warning: subrecipe totals (+ final vials) do not equal overall sum — check inputs.</span>
+                            )}
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Right: Total */}
                       <div className="md:col-span-1">
                         <div className="rounded-lg border p-4 bg-muted/30">
                           <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
@@ -268,7 +440,7 @@ export default function MatrixCalculator() {
                           </div>
                           <div className="text-2xl font-bold text-primary">{fmt(total)}</div>
                           <p className="text-xs text-muted-foreground mt-3">
-                            Costs reflect crafting <b>one</b> Matrix.
+                            Costs reflect crafting <b>one</b> Matrix. Main table includes 15 Azoth Vials.
                           </p>
                         </div>
                       </div>
@@ -301,35 +473,35 @@ export default function MatrixCalculator() {
                         {
                           matrix: 'Weapon Matrix (Weaponsmithing)',
                           path: 'Enchanted Handle + Tempered Cast',
-                          ingredients: '4 Prismatic Ingot, 2 Prismatic Plank, 4 Prismatic Leather, 500 Azoth, 10 Gypsum Orb, 2 Prismatic Cloth',
+                          ingredients: '4 Prismatic Ingot, 2 Prismatic Plank, 4 Prismatic Leather, 750 Azoth, 10 Gypsum Orb, 2 Prismatic Cloth, 15 Azoth Vials',
                           trait: 'Weaponsmithing',
                           station: 'Forge',
                         },
                         {
                           matrix: 'Weapon Matrix (Engineering)',
                           path: 'Enchanted Handle + Honing Acid',
-                          ingredients: '2 Prismatic Ingot, 2 Prismatic Plank, 4 Prismatic Leather, 500 Azoth, 10 Gypsum Orb, 2 Prismatic Block, 25 Infused Alkahest',
+                          ingredients: '2 Prismatic Ingot, 2 Prismatic Plank, 4 Prismatic Leather, 750 Azoth, 10 Gypsum Orb, 2 Prismatic Block, 25 Infused Alkahest, 15 Azoth Vials',
                           trait: 'Engineering',
                           station: 'Workshop',
                         },
                         {
                           matrix: 'Armor Matrix (Armoring)',
                           path: 'Blessed Rivets + Reinforced Bracing',
-                          ingredients: '4 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 500 Azoth, 10 Gypsum Orb, 2 Prismatic Plank, 2 Prismatic Cloth',
+                          ingredients: '4 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 750 Azoth, 10 Gypsum Orb, 2 Prismatic Plank, 2 Prismatic Cloth, 15 Azoth Vials',
                           trait: 'Armoring',
                           station: 'Outfitting',
                         },
                         {
                           matrix: 'Armor Matrix (Arcana)',
                           path: 'Tempered Cast + Honing Acid',
-                          ingredients: '2 Prismatic Ingot, 2 Prismatic Cloth, 4 Prismatic Leather, 500 Azoth, 10 Gypsum Orb, 2 Prismatic Block, 25 Infused Alkahest',
+                          ingredients: '2 Prismatic Ingot, 2 Prismatic Cloth, 4 Prismatic Leather, 750 Azoth, 10 Gypsum Orb, 2 Prismatic Block, 25 Infused Alkahest, 15 Azoth Vials',
                           trait: 'Arcana',
                           station: 'Arcane Repository',
                         },
                         {
                           matrix: 'Jewelry Matrix (Jewelcrafting)',
                           path: 'Blessed Rivets + Honing Acid',
-                          ingredients: '4 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 500 Azoth, 10 Gypsum Orb, 2 Prismatic Leather, 25 Infused Alkahest',
+                          ingredients: '4 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 750 Azoth, 10 Gypsum Orb, 2 Prismatic Leather, 25 Infused Alkahest, 15 Azoth Vials',
                           trait: 'Jewelcrafting',
                           station: 'Outfitting',
                         },
@@ -368,31 +540,31 @@ export default function MatrixCalculator() {
                       {[
                         {
                           sub: 'Enchanted Handle (Armoring)',
-                          ingredients: '2 Prismatic Ingot, 2 Prismatic Plank, 2 Prismatic Leather, 250 Azoth, 5 Gypsum Orb',
+                          ingredients: '2 Prismatic Ingot, 2 Prismatic Plank, 2 Prismatic Leather, 250 Azoth, 5 Gypsum Orb, 5 Azoth Vials',
                           trait: 'Armoring',
                           station: 'Outfitting',
                         },
                         {
                           sub: 'Tempered Cast (Weaponsmithing)',
-                          ingredients: '2 Prismatic Ingot, 2 Prismatic Cloth, 2 Prismatic Leather, 250 Azoth, 5 Gypsum Orb',
+                          ingredients: '2 Prismatic Ingot, 2 Prismatic Cloth, 2 Prismatic Leather, 250 Azoth, 5 Gypsum Orb, 5 Azoth Vials',
                           trait: 'Weaponsmithing',
                           station: 'Forge',
                         },
                         {
                           sub: 'Honing Acid (Arcana)',
-                          ingredients: '2 Prismatic Block, 2 Prismatic Leather, 25 Infused Alkahest, 250 Azoth, 5 Gypsum Orb',
+                          ingredients: '2 Prismatic Block, 2 Prismatic Leather, 25 Infused Alkahest, 250 Azoth, 5 Gypsum Orb, 5 Azoth Vials',
                           trait: 'Arcana',
                           station: 'Arcane Repository',
                         },
                         {
                           sub: 'Blessed Rivets (Jewelcrafting)',
-                          ingredients: '2 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 250 Azoth, 5 Gypsum Orb',
+                          ingredients: '2 Prismatic Block, 2 Prismatic Ingot, 15 Powerful Gemstone Dust, 250 Azoth, 5 Gypsum Orb, 5 Azoth Vials',
                           trait: 'Jewelcrafting',
                           station: 'Outfitting',
                         },
                         {
                           sub: 'Reinforced Bracing (Engineering)',
-                          ingredients: '2 Prismatic Block, 2 Prismatic Plank, 2 Prismatic Cloth, 250 Azoth, 5 Gypsum Orb',
+                          ingredients: '2 Prismatic Block, 2 Prismatic Plank, 2 Prismatic Cloth, 250 Azoth, 5 Gypsum Orb, 5 Azoth Vials',
                           trait: 'Engineering',
                           station: 'Workshop',
                         },
@@ -420,7 +592,7 @@ export default function MatrixCalculator() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {MATRIXES.map((m) => {
-                  const total = calcMatrixTotal(prices, m.req);
+                  const total = calcTotal(prices, m.req);
                   return (
                     <div key={m.key} className="flex items-center justify-between text-sm">
                       <span className="truncate max-w-[66%]" title={m.title}>{m.title}</span>
@@ -439,7 +611,3 @@ export default function MatrixCalculator() {
     </Layout>
   );
 }
-
-
-
-

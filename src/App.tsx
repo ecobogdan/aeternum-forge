@@ -8,10 +8,12 @@ import Builds from "./pages/Builds";
 import Database from "./pages/Database";
 import ItemDetail from "./pages/ItemDetail";
 import PerkDetail from "./pages/PerkDetail";
+import DatabaseEntityDetail from "./pages/DatabaseEntityDetail";
 import ArmorWeightCalculator from "./pages/ArmorWeightCalculator";
 import RunglassCalculator from "./pages/RunglassCalculator";
 import TrophyCalculator from "./pages/TrophyCalculator";
 import MatrixCalculator from "./pages/MatrixCalculator";
+import SkillBuilder from "./pages/SkillBuilder";
 import NewPlayerGuide from "./pages/guides/NewPlayerGuide";
 import EndGameGuide from "./pages/guides/EndGameGuide";
 import PvPGuide from "./pages/guides/PvPGuide";
@@ -35,6 +37,7 @@ const App = () => (
           <Route path="/new-world-database" element={<Database />} />
           <Route path="/new-world-database/item/:itemId" element={<ItemDetail />} />
           <Route path="/new-world-database/perk/:perkId" element={<PerkDetail />} />
+          <Route path="/new-world-database/:categoryId/:entityId" element={<DatabaseEntityDetail />} />
           
           {/* Guide Routes */}
           <Route path="/guides/new-world-new-player-guide" element={<NewPlayerGuide />} />
@@ -48,6 +51,7 @@ const App = () => (
           <Route path="/tools/new-world-armor-weight-calculator" element={<ArmorWeightCalculator />} />
           <Route path="/tools/new-world-runeglass" element={<RunglassCalculator />} />
           <Route path="/tools/new-world-trophies" element={<TrophyCalculator />} />
+          <Route path="/tools/new-world-skill-builder" element={<SkillBuilder />} />
           <Route path="/tools/new-world-matrix" element={<MatrixCalculator />} />
           
           {/* Admin Route */}

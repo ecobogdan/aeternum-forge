@@ -13,26 +13,26 @@ import { RotateCcw } from 'lucide-react';
 // Groups and the minor-tier mote each trophy uses
 const GROUPS = {
   combat: [
-    { name: 'Ancient Combat Trophy', mote: 'Death Mote' },
-    { name: 'Angry Earth Combat Trophy', mote: 'Life Mote' },
-    { name: 'Corrupted Combat Trophy', mote: 'Fire Mote' },
-    { name: 'Lost Combat Trophy', mote: 'Soul Mote' },
-    { name: 'Wildlife Combat Trophy', mote: 'Air Mote' },
+    { name: 'Ancient Combat Trophy', mote: 'Soul Mote' },
+    { name: 'Angry Earth Combat Trophy', mote: 'Earth Mote' },
+    { name: 'Corrupted Combat Trophy', mote: 'Life Mote' },
+    { name: 'Lost Combat Trophy', mote: 'Death Mote' },
+    { name: 'Wildlife Combat Trophy', mote: 'Fire Mote' },
     { name: 'Human Combat Trophy', mote: 'Death Mote' },
   ],
   crafting: [
     { name: 'Weaponsmithing Trophy', mote: 'Fire Mote' },
-    { name: 'Armoring Trophy', mote: 'Earth Mote' },
+    { name: 'Armoring Trophy', mote: 'Fire Mote' },
     { name: 'Engineering Trophy', mote: 'Air Mote' },
-    { name: 'Arcana Trophy', mote: 'Death Mote' },
-    { name: 'Jewelcrafting Trophy', mote: 'Life Mote' },
+    { name: 'Arcana Trophy', mote: 'Earth Mote' },
+    { name: 'Cooking Trophy', mote: 'Water Mote' },
   ],
   gathering: [
     { name: 'Mining Trophy', mote: 'Earth Mote' },
     { name: 'Fishing Trophy', mote: 'Water Mote' },
     { name: 'Logging Trophy', mote: 'Air Mote' },
-    { name: 'Harvesting Trophy', mote: 'Life Mote' },
-    { name: 'Skinning Trophy', mote: 'Death Mote' },
+    { name: 'Harvesting Trophy', mote: 'Water Mote' },
+    { name: 'Skinning Trophy', mote: 'Air Mote' },
     { name: 'Luck Trophy', mote: 'Rabbit Foot' },
   ],
 } as const;
@@ -51,7 +51,7 @@ const BASIC_MAT: Record<string, string> = {
   'Armoring Trophy': "Armorer's Journal",
   'Engineering Trophy': "Engineer's Technique",
   'Arcana Trophy': 'Ancient Texts',
-  'Jewelcrafting Trophy': 'Life Mote', // per original
+  'Cooking Trophy': "Chef's Secret Techniques", // per original
   'Mining Trophy': "Surveyor's Tools",
   'Logging Trophy': "Lumberjack's Token",
   'Harvesting Trophy': 'Journal of Aeternum Flora',
@@ -75,7 +75,7 @@ const MAJOR_MAT: Record<string, string> = {
   'Armoring Trophy': 'Precision Armoring',
   'Engineering Trophy': 'Precision Engineering',
   'Arcana Trophy': "Philosopher's Stone",
-  'Jewelcrafting Trophy': "Philosopher's Stone",
+  'Cooking Trophy': "Chef's Secret Cookbook",
   'Mining Trophy': 'Adamantine Dust',
   'Logging Trophy': 'Pure Resin',
   'Harvesting Trophy': 'Mercurial Token',

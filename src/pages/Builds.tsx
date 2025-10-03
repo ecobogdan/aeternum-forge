@@ -373,8 +373,8 @@ const handleBuildSelect = useCallback(
             scalingContainer.style.height = `${exactHeight}px`;
           }
           
-          // Update the outer container height to match the scaled content (70% of original)
-          const scaledHeight = Math.ceil(exactHeight * 0.7);
+          // Update the outer container height to match the scaled content (100% of original)
+          const scaledHeight = Math.ceil(exactHeight * 1.0);
           containerRef.current.style.height = `${scaledHeight}px`;
         }
       }
@@ -478,7 +478,7 @@ const handleBuildSelect = useCallback(
         </a>
       </div>
 
-      <div className="container px-4 py-8 space-y-8">
+      <div className="w-full max-w-none px-4 py-8 space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-gold-primary bg-clip-text text-transparent">
@@ -493,7 +493,7 @@ const handleBuildSelect = useCallback(
         
 
         {/* Build Content Area with Sidebar */}
-        <div className="flex gap-6">
+        <div className="flex gap-4 lg:gap-6 max-w-[140rem] mx-auto">
           {/* Sidebar */}
           <BuildsSidebar
             builds={buildsMatchingTags}
@@ -524,7 +524,7 @@ const handleBuildSelect = useCallback(
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-[4] space-y-4 lg:space-y-6 min-w-0">
             {/* Header with Toggle Button */}
             <div className="flex items-center space-x-4">
               <Button
@@ -722,7 +722,7 @@ const handleBuildSelect = useCallback(
               <CardContent className="p-6 overflow-visible">
                 {currentBuild.embed === 'iframe' ? (
                   <div className="w-full overflow-hidden" ref={containerRef}>
-                    <div className="transform scale-[0.7] origin-top-left" style={{ width: '142.86%' }}>
+                    <div className="transform scale-[1.0] origin-top-left" style={{ width: '100%' }}>
                       <iframe
                         ref={iframeRef}
                         src={currentBuild.link}
@@ -778,7 +778,7 @@ const handleBuildSelect = useCallback(
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-hidden" style={{ aspectRatio: '16/9', height: 'auto' }}>
-                    <div className="transform scale-[0.7] origin-top-left" style={{ width: '142.86%', height: '142.86%' }}>
+                    <div className="transform scale-[1.0] origin-top-left" style={{ width: '100%', height: '100%' }}>
                       <iframe
                         src={currentBuild.youtube.replace('watch?v=', 'embed/')}
                         width="100%"
